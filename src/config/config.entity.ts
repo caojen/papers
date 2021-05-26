@@ -19,7 +19,7 @@ export class Config {
     proceed: boolean
   };
   time: {
-    thread: number,
+    threads: number,
     interval: number
   };
   ncbi: {
