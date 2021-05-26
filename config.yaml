@@ -1,0 +1,23 @@
+mysql:                            # 指定数据库配置
+  host: "MYSQL_HOST"
+  port: "MYSQL_PORT"
+  user: "MYSQL_USER"
+  pass: "MYSQL_PASS"
+  database: "MYSQL_DATABASE"
+search:                           # 指定搜索配置
+  keywords:                       ## 指定搜索关键词
+    - "cancer"  
+  begindate: "2021/5/1"           ## 指定搜索起始日期
+  enddate: "2021/5/10"            ## 指定搜索终止日期
+  interval: 1                     ## 起始日期到终止日期中，每次搜索的间隔（例如，1 表示每次只搜索1天）
+  proceed: false                  ## 当搜索完 起始日期到终止日期 后，是否继续进行搜索，直到当前日期的前一天
+time:
+  threads: 5                      ## 搜索启动的线程数量
+  interval: 1000                  ## 所有等待时间统一为 多少 毫秒
+ncbi:                             # 与爬虫页面相关的配置
+  prefix: "https://pubmed.ncbi.nlm.nih.gov"
+  params:
+    term: "term"
+    page: "page"
+    filter: "filter"
+  
