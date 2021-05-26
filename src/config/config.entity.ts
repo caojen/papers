@@ -1,5 +1,5 @@
-import yaml from 'yaml'
-import fs from 'fs'
+import * as yaml from 'yaml'
+import * as fs from 'fs'
 
 const cfile = 'config.yaml'
 
