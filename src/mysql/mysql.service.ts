@@ -22,7 +22,7 @@ export class MysqlService {
       multipleStatements: false,
       connectionLimit: 20,
       waitForConnections: true,
-      queueLimit: 0
+      queueLimit: 0,
     });
     this.executePool = mysql.createPool({
       host: this.config.mysql.host,
@@ -33,22 +33,22 @@ export class MysqlService {
       multipleStatements: false,
       connectionLimit: 20,
       waitForConnections: true,
-      queueLimit: 0
+      queueLimit: 0,
     });
   }
 
   async query(sql: string, params: any[] = []): Promise<any> {
     try {
-      if(sql.trim().substr(0, 6).toLocaleLowerCase() === 'select') {
+      if (sql.trim().substr(0, 6).toLocaleLowerCase() === 'select') {
         const res = await this.selectPool.query(sql, params);
         return res[0];
       } else {
         const res = await this.executePool.query(sql, params);
         return res;
       }
-    } catch(err) {
+    } catch (err) {
       this.logger.error(err);
-      throw new Error("数据库查询出错");
+      throw new Error('数据库查询出错');
     }
   }
 }

@@ -62,3 +62,13 @@ CREATE TABLE IF NOT EXISTS `paper_keyword` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+-- 创建 用于断点续传的设置表
+CREATE TABLE IF NOT EXISTS `settings` (
+  `search` VARCHAR(128) NOT NULL,
+  `date` VARCHAR(128) NOT NULL,
+  `page` INT (11) NOT NULL,
+  UNIQUE INDEX settings_unique_index(`search`, `date`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;

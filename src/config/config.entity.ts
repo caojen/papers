@@ -1,42 +1,43 @@
-import * as yaml from 'yaml'
-import * as fs from 'fs'
+import * as yaml from 'yaml';
+import * as fs from 'fs';
 
-const cfile = 'config.yaml'
+const cfile = 'config.yaml';
 
 export class Config {
   mysql: {
-    host: string,
-    port: string,
-    user: string,
-    pass: string,
-    database: string
+    host: string;
+    port: string;
+    user: string;
+    pass: string;
+    database: string;
   };
   search: {
-    keywords: string[],
-    begindate: string,
-    enddate: string,
-    interval: number,
-    proceed: boolean
+    keywords: string[];
+    begindate: string;
+    enddate: string;
+    interval: number;
+    proceed: boolean;
   };
   time: {
-    threads: number,
-    interval: number
+    threads: number;
+    interval: number;
   };
   ncbi: {
-    prefix: string,
+    prefix: string;
     params: {
-      term: string,
-      page: string,
-      filter: string
-    },
-    pagesize: number,
-    totalResults: string
+      term: string;
+      page: string;
+      filter: string;
+    };
+    pagesize: number;
+    totalResults: string;
+    ids: string;
   };
 
   private static c: Config = null;
 
   public static load(): Config {
-    if(!Config.c) {
+    if (!Config.c) {
       const s = fs.readFileSync(cfile).toString();
       Config.c = yaml.parse(s);
       Config.c = Config.parseMysql(Config.c);
