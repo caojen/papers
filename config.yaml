@@ -20,6 +20,6 @@ ncbi:                             # 与爬虫页面相关的配置
     term: "term"
     page: "page"
     filter: "filter"
-  pagesize: 10
-  totalResult: totalResult
+  pagesize: 10                    ## 返回页面中，每页含有多少条信息
+  totalResults: "totalResults"        ## 从哪个关键字可以获得“查询结果数”
   
