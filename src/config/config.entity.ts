@@ -3,7 +3,7 @@ import fs from 'fs'
 
 const cfile = 'config.yaml'
 
-class Config {
+export class Config {
   mysql: {
     host: string,
     port: string,
