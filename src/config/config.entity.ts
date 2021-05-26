@@ -30,7 +30,7 @@ export class Config {
       filter: string
     },
     pagesize: number,
-    totalResult: string
+    totalResults: string
   };
 
   private static c: Config = null;
