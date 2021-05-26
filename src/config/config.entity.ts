@@ -1,3 +1,8 @@
+import yaml from 'yaml'
+import fs from 'fs'
+
+const cfile = 'config.yaml'
+
 class Config {
   mysql: {
     host: string,
@@ -26,5 +31,16 @@ class Config {
     },
     pagesize: number,
     totalResult: string
+  };
+
+  private static c: Config = null;
+
+  public static load(): Config {
+    if(!Config.c) {
+      const s = fs.readFileSync(cfile).toString();
+      Config.c = yaml.parse(s);
+    }
+
+    return Config.c;
   }
 }
