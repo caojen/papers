@@ -39,8 +39,18 @@ export class Config {
     if(!Config.c) {
       const s = fs.readFileSync(cfile).toString();
       Config.c = yaml.parse(s);
+      Config.c = Config.parseMysql(Config.c);
     }
 
     return Config.c;
+  }
+
+  private static parseMysql(config: Config): Config {
+    config.mysql.host = process.env[config.mysql.host];
+    config.mysql.pass = process.env[config.mysql.pass];
+    config.mysql.database = process.env[config.mysql.database];
+    config.mysql.port = process.env[config.mysql.port];
+    config.mysql.user = process.env[config.mysql.user];
+    return config;
   }
 }
