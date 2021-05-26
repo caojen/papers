@@ -20,4 +20,6 @@ ncbi:                             # 与爬虫页面相关的配置
     term: "term"
     page: "page"
     filter: "filter"
+  pagesize: 10
+  totalResult: totalResult
   

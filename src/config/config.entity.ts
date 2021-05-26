@@ -23,6 +23,8 @@ class Config {
       term: string,
       page: string,
       filter: string
-    }
+    },
+    pagesize: number,
+    totalResult: string
   }
 }
