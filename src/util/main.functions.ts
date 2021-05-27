@@ -23,7 +23,7 @@ async function fetchAndStore(id: number) {
   }
   const config = Config.load();
   const r = (await http.get(`${config.ncbi.prefix}/${id}`)).toString();
-  log.log(['-- fetch', id, 'done. Trying to resolve...']);
+  // log.log(['-- fetch', id, 'done. Trying to resolve...']);
 
   const detail = {
     id,
@@ -35,11 +35,11 @@ async function fetchAndStore(id: number) {
     abstract: arfs.get_abstract(r),
     keywords: arfs.get_keywords(r),
   };
-  log.log(['-- resolve', id, 'done. Trying to store...']);
+  // log.log(['-- resolve', id, 'done. Trying to store...']);
 
   const article = new Article(detail);
   const pid = await article.sync();
-  log.log(['-- store ', id, '(done) =>', pid]);
+  // log.log(['-- store ', id, '(done) =>', pid]);
 }
 
 async function thread(
