@@ -27,7 +27,7 @@ export class Author {
           insert into author(name)
           values(?)
         `;
-        const res = await Author.mysqlService.query(sql, [this.name]);
+        const res = await Author.mysqlService.query(s, [this.name]);
         const insertId = res.insertId;
         this.id = insertId;
       } else {

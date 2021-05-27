@@ -34,7 +34,7 @@ async function fetchAndStore(id: number) {
     keywords: arfs.get_keywords(r)
   };
   console.log(detail);
-  process.exit(0);
+  // process.exit(0);
 
   const article = new Article(detail);
   const pid = await article.sync();

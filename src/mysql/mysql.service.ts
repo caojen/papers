@@ -44,7 +44,7 @@ export class MysqlService {
         return res[0];
       } else {
         const res = await this.executePool.query(sql, params);
-        return res;
+        return res[0];
       }
     } catch (err) {
       this.logger.error(err);

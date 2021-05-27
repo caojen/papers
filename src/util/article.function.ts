@@ -1,33 +1,31 @@
 // 解析一个文章页面的函数
 
 export function get_type(c: string): string {
-  const e = new RegExp("<div\\s+class=\"publication-type\"\\s+>\\S+</div>", 'g');
-  const str = e.exec(c)[0];
-  if(!str) {
-    return ''
+  //<div class="publication-type" >Review</div>
+  const target = '<div class="publication-type"';
+  const end = '/div>';
+  const firstIndex = c.indexOf(target);
+  const endIndex = c.indexOf(end, firstIndex);
+  const begin = firstIndex + target.length;
+  const length = endIndex - begin;
+  let ret = c.substr(begin, length).trim();
+  ret = ret.substr(1, ret.length - 2);
+  if(ret.length > 32) {
+    ret = '';
   }
-  const n = />\S+</g.exec(str)[0];
-  if(!n) {
-    return ''
-  }
-  const ret = n.substr(1, n.length - 2);
   return ret;
 }
 
 export function get_publication(c: string): string {
   // <meta name="citation_publisher" content="Urologia">
 
-  const e = new RegExp("<meta\\s+name=\"citation_publisher\"\\s+content=\"\\S+\">", 'g');
-  const str = e.exec(c)[0];
-  if(!str) {
-    return '';
-  }
-  const n = new RegExp("content=\"\\S+\"", 'g');
-  const nn = n.exec(str)[0];
-  if(!nn) {
-    return ''
-  }
-  const ret = nn.substr(9, nn.length - 10);
+  const target = '<meta name="citation_publisher" content="';
+  const end = '">';
+  const firstIndex = c.indexOf(target);
+  const endIndex = c.indexOf(end, firstIndex);
+  const begin = firstIndex + target.length;
+  const length = endIndex - begin;
+  const ret = c.substr(begin, length).trim();
   return ret;
 }
 
@@ -38,7 +36,10 @@ export function get_time(c: string): string {
   const endIndex = c.indexOf(end, firstIndex);
   const begin = firstIndex + target.length;
   const length = endIndex - begin;
-  const ret = c.substr(begin, length).trim();
+  let ret = c.substr(begin, length).trim();
+  if(ret.length > 32) {
+    ret = '';
+  }
   return ret;
 }
 

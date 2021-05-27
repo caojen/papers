@@ -25,7 +25,7 @@ export class Keyword {
         insert into keyword(content)
         values(?);
       `;
-      const res = await Keyword.mysqlService.query(sql, [this.content]);
+      const res = await Keyword.mysqlService.query(s, [this.content]);
       this.id = res.insertId;
     } else {
       this.id = res[0].id;

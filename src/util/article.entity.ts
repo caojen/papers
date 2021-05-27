@@ -66,6 +66,7 @@ export class Article {
     for(const author of this.authors) {
       const a = new Author(author);
       const aid = await a.sync();
+      console.log(author, aid);
       const sql = `
         insert into paper_author(pid, aid)
         values(?, ?);
