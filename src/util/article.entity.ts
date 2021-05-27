@@ -60,7 +60,7 @@ export class Article {
   }
   async sync(): Promise<number> {
     if (await this.exists()) {
-      log.warn([this.pid, 'exists. Skip...']);
+      // log.warn([this.pid, 'exists. Skip...']);
       return this.pid;
     }
     const paper = `
