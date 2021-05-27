@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS `paper` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `origin_id` INT(11) NOT NULL COMMENT '在网站上的id',
   `type` VARCHAR(32) NOT NULL COMMENT '类型',
-  `publication` VARCHAR(128) NOT NULL COMMENT '发表刊物',
+  `publication` VARCHAR(256) NOT NULL COMMENT '发表刊物',
   `time` VARCHAR(32) NOT NULL COMMENT '发表时间',
-  `title` VARCHAR(1024) NOT NULL COMMENT '论文标题',
+  `title` VARCHAR(2048) NOT NULL COMMENT '论文标题',
   PRIMARY KEY (`id`),
   UNIQUE INDEX paper_origin_id_unique_index(`origin_id`)
 )
@@ -48,7 +48,7 @@ DEFAULT CHARACTER SET = utf8;
 -- 创建关键词表
 CREATE TABLE IF NOT EXISTS `keyword` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `content` VARCHAR(64) NOT NULL,
+  `content` VARCHAR(1024) NOT NULL,
   PRIMARY KEY(`id`)
 )
 ENGINE = InnoDB
