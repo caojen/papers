@@ -142,7 +142,7 @@ async function thread(
     }
     log.log(['thread', id, 'resolving ids', ...ids]);
     for (const i of ids) {
-      log.log(['thread', id, 'fetch and store', i]);
+      // log.log(['thread', id, 'fetch and store', i]);
       await fetchAndStore(i);
     }
 
