@@ -121,12 +121,20 @@ async function thread(
     // 1. get all ids:
     const ids = [];
     {
-      const e_ids = new RegExp(`${config.ncbi.ids}="\\S+"`, 'g');
-      const str = e_ids.exec(r)[0];
-      const s = str.substr(config.ncbi.ids.length + 2, str.length - 2);
-      const split = s.split(',');
-      for (const ss of split) {
-        ids.push(parseInt(ss));
+      try {
+        const e_ids = new RegExp(`${config.ncbi.ids}="\\S+"`, 'g');
+        const str = e_ids.exec(r)[0];
+        const s = str.substr(config.ncbi.ids.length + 2, str.length - 2);
+        const split = s.split(',');
+        for (const ss of split) {
+          ids.push(parseInt(ss));
+        }
+      } catch (err) {
+        log.error([{
+          thread_id: id,
+          msg: '获取当页ids出错'
+        }]);
+        throw(err);
       }
     }
     log.log(['thread', id, 'resolving ids', ...ids]);
@@ -185,7 +193,11 @@ export async function main() {
         );
         date = getNextDate(date, config.search.interval);
       }
-      await Promise.all(arr).then(() => log.log(['所有线程退出']))
+      try {
+        await Promise.all(arr).then(() => log.log(['所有线程退出']))
+      } catch (err) {
+        log.error(['某个线程出错', err]);
+      }
     }
   }
 
