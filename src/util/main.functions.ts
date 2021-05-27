@@ -185,11 +185,7 @@ export async function main() {
         );
         date = getNextDate(date, config.search.interval);
       }
-      try {
-        await Promise.all(arr).then(() => log.log(['所有线程被退出']))
-      } catch (err) {
-        log.error(['某个线程出错，错误信息：', err]);
-      }
+      await Promise.all(arr).then(() => log.log(['所有线程退出']))
     }
   }
 
