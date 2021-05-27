@@ -1,10 +1,8 @@
 import { Config } from 'src/config/config.entity';
 import log from 'src/util/logger.functions';
-
+const config = Config.load();
 export function sleep(ms: number = -1) {
   if(ms == -1) {
-    const config = new Config();
-    console.log(config);
     ms = config.time.interval;
   }
   log.warn(['sleeping for', ms, '...']);

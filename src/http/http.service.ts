@@ -19,12 +19,12 @@ export class HttpService {
     const u = `${url}?${config.ncbi.params.page}=${params.page}&${config.ncbi.params.term}=${params.search}&${config.ncbi.params.filter}=${params.filter}`;
     while (true) {
       try {
-        const response = requestAsync(u, {
+        const response: Buffer = await requestAsync(u, {
           method: 'GET',
           encoding: null,
         });
 
-        return response;
+        return response.toString();
       } catch (err) {
         log.error(['fetch error, sleep and retry...']);
         await sleep();
@@ -35,11 +35,11 @@ export class HttpService {
   async get(url: string): Promise<string> {
     while (true) {
       try {
-        const response = requestAsync(url, {
+        const response: Buffer = await requestAsync(url, {
           method: 'GET',
           encoding: null,
         });
-        return response;
+        return response.toString();
       } catch (err) {
         log.error(['fetch error, sleep and retry...']);
         await sleep();

@@ -114,17 +114,20 @@ async function thread(
   }
 
   do {
+    if(curpage > totalPage) {
+      break;
+    }
     // r is the page:
     // 1. get all ids:
     const ids = [];
     {
       try {
         const e_ids = new RegExp(`${config.ncbi.ids}="\\S+"`, 'g');
-        let n = null;
-        while(n === null) {
-          log.error(['thread', id, 'n is null']);
-          n = e_ids.exec(r);
-          await sleep();
+        let n = e_ids.exec(r);;
+        if(n === null) {
+          // 没有找到任何id，该线程退出
+          log.log(['thread', id, 'exit because n is null']);
+          break;
         }
         const str = n[0];
         const s = str.substr(config.ncbi.ids.length + 2, str.length - 2);
@@ -165,6 +168,7 @@ async function thread(
       filter: `dates.${date2string(begin)}-${date2string(end)}`,
     });
   } while (curpage <= totalPage);
+  log.log(['thread', id, 'exit', curpage, '/', totalPage]);
 }
 
 export async function main() {
