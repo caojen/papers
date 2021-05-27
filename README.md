@@ -19,7 +19,7 @@
    1. 打开``config.yaml``
    2. ``search.keywords``可以配置需要搜索的字段，可以指定多个字段
    3. ``search.begindate, search.enddate``指定从哪到哪，闭区间。
-   4. ``search.proceed``指定当搜集完上面的日期区间后，是否继续搜集，直到今天为止。（TODO：该选项未影响程序）
+   4. ``search.proceed``指定当搜集完上面的日期区间后，是否继续搜集，直到今天为止。~~（TODO：该选项未影响程序）~~
 
 ## 运行
 当完成上述配置后，可以使用以下命令运行：
@@ -56,4 +56,4 @@ npm run start:prod
 2. 在未知情况下，某个莫名出现的网络错误会导致该线程终止。暂时还没有找到是哪里有问题。
 
 ## TODOs
-1. 将``search.proceed=true``实现
+1. ~~将``search.proceed=true``实现~~
