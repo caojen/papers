@@ -122,6 +122,7 @@ async function thread(
         const e_ids = new RegExp(`${config.ncbi.ids}="\\S+"`, 'g');
         let n = null;
         while(n === null) {
+          log.error(['thread', id, 'n is null']);
           n = e_ids.exec(r);
         }
         const str = n[0];
