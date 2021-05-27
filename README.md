@@ -1,73 +1,46 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# 爬虫工具v1.0
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 使用方法
+本工具主要依赖为：
+1. 运行环境：``node v14.17.0``，但只要版本不太低就可以；
+2. 一个Mysql数据库，最好数据库和爬虫工具放在同一个内网，因为读写I/O很大；
+3. 良好的网络。
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 配置步骤
+1. 安装node
+2. 运行``npm install``，运行后将会自动其他依赖
+3. 配置MYSQL，请执行以下步骤
+   1. 记录MYSQL的相关信息，即ip，端口，用户名，密码
+   2. 对应上面四项，分别配置环境变量：`$MYSQL_HOST`, `$MYSQL_PORT`, `$MYSQL_USER`, `$MYSQL_PASS`
+   3. 配置环境变量`$MYSQL_DATABASE=papers`
+   4. 初始化数据库，使用命令：`mysql -u $MYSQL_USER -h $MYSQL_HOST -P $MYSQL_PORT -p < sql/init.sql`
+   5. 如果无法执行，请自行`nc $MYSQL_HOST $MYSQL_PORT`诊断错误
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
+## 运行
+当完成上述配置后，可以使用以下命令运行：
 ```bash
-$ npm install
+npm run start:dev
+# OR
+npm run start:prod
 ```
 
-## Running the app
+## 数据库信息说明
+数据库初始化文件在``sql/init.sql``中。默认数据库名为``papers``
+### Table paper
+该表存储了所有论文的基本信息，包括论文的`origin_id`(也就是远程库中这篇论文的id), ``type``(类型), `publication`(出版刊物), `time`(时间), `title`(标题)
 
-```bash
-# development
-$ npm run start
+### Table author
+该表存储了所有的作者。
+作者和论文是多对多的关系，因此有另外一个表``paper_author``保存论文的所有作者。
 
-# watch mode
-$ npm run start:dev
+### Table abstract
+该表存储了所有的摘要。
+虽然摘要和论文是一对一的关系，但是摘要一般比较长，因此将其拆表。
 
-# production mode
-$ npm run start:prod
-```
+### Table keyword
+该表存储了所有的关键字
+关键字和论文是多对多的关系，因此还存在另外一个表``paper_keyword``来保存论文的所有关键字
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+### Table settings
+该表是用于记录每个搜索字段每天爬虫运行到哪一页了。
+用于断点续传。
