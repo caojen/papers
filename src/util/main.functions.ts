@@ -72,7 +72,7 @@ async function thread(
 
   // get total results:
   let totalResults = 0;
-  {
+  try {
     const e_totalResult = new RegExp(
       `${config.ncbi.totalResults}:\\s+parseInt\\("\\d+"`,
       'g',
@@ -80,6 +80,11 @@ async function thread(
     const str = e_totalResult.exec(r)[0];
     const n = /\d+/g.exec(str)[0];
     totalResults = parseInt(n);
+  } catch (err) {
+    throw {
+      thread_id: id,
+      msg: 'parseInt时出错'
+    }
   }
 
   if (totalResults > 10000) {
@@ -179,7 +184,11 @@ export async function main() {
         );
         date = getNextDate(date, config.search.interval);
       }
-      await Promise.all(arr).then(() => log.log(['所有线程被退出']));
+      try {
+        await Promise.all(arr).then(() => log.log(['所有线程被退出']))
+      } catch (err) {
+        log.error(['某个线程出错，错误信息：', err]);
+      }
     }
   }
 
