@@ -1,11 +1,10 @@
 import { Config } from '../config/config.entity';
 import { HttpService } from '../http/http.service';
-import { MysqlService } from '../mysql/mysql.service';
 import log from '../util/logger.functions';
 import { Article } from './article.entity';
 import * as arfs from './article.function';
+import { mysqlService } from './mysql.instance';
 
-const mysqlService = new MysqlService();
 const http = new HttpService();
 
 function getNextDate(date: Date, interval: number) {

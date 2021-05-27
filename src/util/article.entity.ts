@@ -2,9 +2,9 @@ import { MysqlService } from 'src/mysql/mysql.service';
 import { Author } from './author.entity';
 import { Keyword } from './keyword.entity';
 import log from './logger.functions';
+import { mysqlService } from './mysql.instance';
 
 export class Article {
-  static mysqlService: MysqlService = null;
   pid?: number;
 
   id: number; // origin_id
@@ -17,16 +17,13 @@ export class Article {
   keywords: string[];
 
   // constructor(id: number) {
-  //   if(Article.mysqlService == null) {
-  //     Article.mysqlService = new MysqlService();
+  //   if(mysqlService == null) {
+  //     mysqlService = new MysqlService();
   //   }
   //   this.id = id;
   // }
 
   constructor(detail: any) {
-    if (Article.mysqlService == null) {
-      Article.mysqlService = new MysqlService();
-    }
     this.id = detail.id;
     this.type = detail.type;
     this.publication = detail.publication;
@@ -38,15 +35,12 @@ export class Article {
   }
 
   static async existsId(origin_id: number) {
-    if (Article.mysqlService == null) {
-      Article.mysqlService = new MysqlService();
-    }
     const sql = `
       select 1 from paper
       where origin_id=?;
     `;
 
-    const res = await Article.mysqlService.query(sql, [origin_id]);
+    const res = await mysqlService.query(sql, [origin_id]);
     return res.length !== 0;
   }
 
@@ -57,7 +51,7 @@ export class Article {
       where origin_id = ?;
     `;
 
-    const res = await Article.mysqlService.query(sql, [this.id]);
+    const res = await mysqlService.query(sql, [this.id]);
     if (res.length === 0) {
       return false;
     } else {
@@ -74,7 +68,7 @@ export class Article {
       insert into paper(origin_id, type, publication, time, title)
       values(?, ?, ?, ?, ?);
     `;
-    const res = await Article.mysqlService.query(paper, [
+    const res = await mysqlService.query(paper, [
       this.id,
       this.type,
       this.publication,
@@ -89,7 +83,7 @@ export class Article {
         insert into paper_author(pid, aid)
         values(?, ?);
       `;
-      await Article.mysqlService.query(sql, [this.pid, aid]);
+      await mysqlService.query(sql, [this.pid, aid]);
     }
 
     const abstract = `
@@ -97,7 +91,7 @@ export class Article {
       values(?, ?);
     `;
 
-    await Article.mysqlService.query(abstract, [this.pid, this.abstract]);
+    await mysqlService.query(abstract, [this.pid, this.abstract]);
     for (const keyword of this.keywords) {
       const k = new Keyword(keyword);
       const kid = await k.sync();
@@ -106,7 +100,7 @@ export class Article {
         values(?, ?);
       `;
 
-      await Article.mysqlService.query(sql, [this.pid, kid]);
+      await mysqlService.query(sql, [this.pid, kid]);
     }
     return this.pid;
   }

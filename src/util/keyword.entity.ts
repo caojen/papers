@@ -1,16 +1,11 @@
-import { MysqlService } from 'src/mysql/mysql.service';
+import { mysqlService } from './mysql.instance';
 
 export class Keyword {
-  static mysqlService: MysqlService = null;
-
   id = -1;
   content: string = null;
 
   constructor(content: string) {
     this.content = content;
-    if (Keyword.mysqlService === null) {
-      Keyword.mysqlService = new MysqlService();
-    }
   }
 
   async sync(): Promise<number> {
@@ -19,13 +14,13 @@ export class Keyword {
       where content=?;
     `;
 
-    const res = await Keyword.mysqlService.query(sql, [this.content]);
+    const res = await mysqlService.query(sql, [this.content]);
     if (res.length === 0) {
       const s = `
         insert into keyword(content)
         values(?);
       `;
-      const res = await Keyword.mysqlService.query(s, [this.content]);
+      const res = await mysqlService.query(s, [this.content]);
       this.id = res.insertId;
     } else {
       this.id = res[0].id;
