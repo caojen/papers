@@ -17,6 +17,7 @@ export class Config {
     enddate: string;
     interval: number;
     proceed: boolean;
+    proceedbreak: number;
   };
   time: {
     threads: number;

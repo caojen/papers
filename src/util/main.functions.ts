@@ -4,6 +4,7 @@ import log from '../util/logger.functions';
 import { Article } from './article.entity';
 import * as arfs from './article.function';
 import { mysqlService } from './mysql.instance';
+import { sleep } from './sleep.function';
 
 const http = new HttpService();
 
@@ -183,4 +184,46 @@ export async function main() {
   }
 
   // todo: continue
+  if (config.search.proceed) {
+    let date = new Date(config.search.enddate);
+    date = getNextDate(date, 1);
+    let now = new Date();
+    while (true) {
+      while (date < now) {
+        // 每个关键词都占据一个线程，每个线程处理一个关键字的多个界面
+        const arr: Promise<any>[] = [];
+        let thread_pid = 1;
+        for (const keyword of config.search.keywords) {
+          arr.push(
+            thread(
+              {
+                search: keyword,
+                page: 1,
+                begintime: date,
+                interval: 1,
+              },
+              thread_pid,
+            ),
+          );
+          thread_pid += 1;
+        }
+        await Promise.all(arr);
+        // 如果date不是now代表的当天，那么表明date当天已经执行完成，将date步进
+        // 否则，仅仅更新now
+        if (
+          date.getFullYear() == now.getFullYear() &&
+          date.getDate() == now.getDate() &&
+          date.getMonth() == now.getMonth()
+        ) {
+          // do nothing...
+        } else {
+          date = getNextDate(date, 1);
+        }
+        await sleep(config.search.proceedbreak);
+        now = new Date();
+      }
+      await sleep(config.search.proceedbreak);
+      now = new Date();
+    }
+  }
 }
