@@ -1,14 +1,14 @@
-import { MysqlService } from "src/mysql/mysql.service";
+import { MysqlService } from 'src/mysql/mysql.service';
 
 export class Keyword {
   static mysqlService: MysqlService = null;
 
-  id: number = -1;
+  id = -1;
   content: string = null;
 
   constructor(content: string) {
     this.content = content;
-    if(Keyword.mysqlService === null) {
+    if (Keyword.mysqlService === null) {
       Keyword.mysqlService = new MysqlService();
     }
   }
@@ -20,7 +20,7 @@ export class Keyword {
     `;
 
     const res = await Keyword.mysqlService.query(sql, [this.content]);
-    if(res.length === 0) {
+    if (res.length === 0) {
       const s = `
         insert into keyword(content)
         values(?);

@@ -17,7 +17,7 @@ export class HttpService {
     },
   ): Promise<string> {
     const u = `${url}?${config.ncbi.params.page}=${params.page}&${config.ncbi.params.term}=${params.search}&${config.ncbi.params.filter}=${params.filter}`;
-    while(true) {
+    while (true) {
       try {
         console.log('function gets');
         const response = requestAsync(u, {
@@ -35,12 +35,12 @@ export class HttpService {
   }
 
   async get(url: string): Promise<string> {
-    while(true) {
+    while (true) {
       try {
         console.log('function get');
         const response = requestAsync(url, {
           method: 'GET',
-          encoding: null
+          encoding: null,
         });
         console.log('function get done');
         return response;

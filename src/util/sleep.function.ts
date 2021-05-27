@@ -1,4 +1,4 @@
-import { Config } from "src/config/config.entity";
+import { Config } from 'src/config/config.entity';
 
 const config = new Config();
 

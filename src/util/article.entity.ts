@@ -1,7 +1,7 @@
-import { MysqlService } from "src/mysql/mysql.service";
-import { Author } from "./author.entity";
-import { Keyword } from "./keyword.entity";
-import log from './logger.functions'
+import { MysqlService } from 'src/mysql/mysql.service';
+import { Author } from './author.entity';
+import { Keyword } from './keyword.entity';
+import log from './logger.functions';
 
 export class Article {
   static mysqlService: MysqlService = null;
@@ -24,7 +24,7 @@ export class Article {
   // }
 
   constructor(detail: any) {
-    if(Article.mysqlService == null) {
+    if (Article.mysqlService == null) {
       Article.mysqlService = new MysqlService();
     }
     this.id = detail.id;
@@ -38,7 +38,7 @@ export class Article {
   }
 
   static async existsId(origin_id: number) {
-    if(Article.mysqlService == null) {
+    if (Article.mysqlService == null) {
       Article.mysqlService = new MysqlService();
     }
     const sql = `
@@ -51,14 +51,14 @@ export class Article {
   }
 
   // to test if id is exists
-  async exists(): Promise<Boolean> {
+  async exists(): Promise<boolean> {
     const sql = `
       select id from paper
       where origin_id = ?;
     `;
 
     const res = await Article.mysqlService.query(sql, [this.id]);
-    if(res.length === 0) {
+    if (res.length === 0) {
       return false;
     } else {
       this.pid = res[0].id;
@@ -66,17 +66,23 @@ export class Article {
     }
   }
   async sync(): Promise<number> {
-    if(await this.exists()) {
+    if (await this.exists()) {
       log.warn([this.pid, 'exists. Skip...']);
       return this.pid;
     }
     const paper = `
       insert into paper(origin_id, type, publication, time, title)
       values(?, ?, ?, ?, ?);
-    `
-    const res = await Article.mysqlService.query(paper, [this.id, this.type, this.publication, this.time, this.title]);
+    `;
+    const res = await Article.mysqlService.query(paper, [
+      this.id,
+      this.type,
+      this.publication,
+      this.time,
+      this.title,
+    ]);
     this.pid = res.insertId;
-    for(const author of this.authors) {
+    for (const author of this.authors) {
       const a = new Author(author);
       const aid = await a.sync();
       const sql = `
@@ -92,7 +98,7 @@ export class Article {
     `;
 
     await Article.mysqlService.query(abstract, [this.pid, this.abstract]);
-    for(const keyword of this.keywords) {
+    for (const keyword of this.keywords) {
       const k = new Keyword(keyword);
       const kid = await k.sync();
       const sql = `

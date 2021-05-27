@@ -10,7 +10,7 @@ export function get_type(c: string): string {
   const length = endIndex - begin;
   let ret = c.substr(begin, length).trim();
   ret = ret.substr(1, ret.length - 2);
-  if(ret.length > 32) {
+  if (ret.length > 32) {
     ret = '';
   }
   return ret;
@@ -37,7 +37,7 @@ export function get_time(c: string): string {
   const begin = firstIndex + target.length;
   const length = endIndex - begin;
   let ret = c.substr(begin, length).trim();
-  if(ret.length > 32) {
+  if (ret.length > 32) {
     ret = '';
   }
   return ret;
@@ -64,8 +64,8 @@ export function get_authors(c: string): string[] {
   const ret = c.substr(begin, length).trim();
   const split = ret.split(';');
   const r = [];
-  for(const s of split) {
-    if(s.trim().length > 0) {
+  for (const s of split) {
+    if (s.trim().length > 0) {
       r.push(s.trim());
     }
   }
@@ -73,14 +73,17 @@ export function get_authors(c: string): string[] {
 }
 
 export function get_abstract(c: string): string {
-  const e = new RegExp("<div\\s+class=\"abstract\\-content\\s+selected\"\\s+id=\"enc\\-abstract\">", 'g');
+  const e = new RegExp(
+    '<div\\s+class="abstract\\-content\\s+selected"\\s+id="enc\\-abstract">',
+    'g',
+  );
   const n = e.exec(c);
-  if(!n) {
+  if (!n) {
     return '';
   }
   const index = n.index;
   const match = n[0];
-  const endIndex = c.indexOf("</div>", index);
+  const endIndex = c.indexOf('</div>', index);
   const begin = index + match.length;
   const length = endIndex - begin;
   let ret = c.substr(begin, length).trim();
@@ -91,27 +94,29 @@ export function get_abstract(c: string): string {
 }
 
 export function get_keywords(c: string): string[] {
-  const e = new RegExp("<strong\\s+class=\"sub\\-title\">\\s+Keywords:\\s+</strong>");;
+  const e = new RegExp(
+    '<strong\\s+class="sub\\-title">\\s+Keywords:\\s+</strong>',
+  );
   const n = e.exec(c);
-  if(!n) {
+  if (!n) {
     return [];
   }
   const index = n.index;
   const match = n[0];
-  const endIndex = c.indexOf("</p>", index);
+  const endIndex = c.indexOf('</p>', index);
   const begin = index + match.length;
   const length = endIndex - begin;
   const ret = c.substr(begin, length).trim();
   const split = ret.split(';');
-  const r:string[] = [];
-  for(const s of split) {
-    if(s.trim().length > 0) {
+  const r: string[] = [];
+  for (const s of split) {
+    if (s.trim().length > 0) {
       r.push(s.trim());
     }
   }
-  if(r.length > 0) {
+  if (r.length > 0) {
     const str = r[r.length - 1];
-    if(str.charAt(str.length - 1) == '.') {
+    if (str.charAt(str.length - 1) == '.') {
       const s = str.substr(0, str.length - 1);
       r[r.length - 1] = s;
     }
