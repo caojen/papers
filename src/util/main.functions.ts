@@ -81,10 +81,7 @@ async function thread(
     const n = /\d+/g.exec(str)[0];
     totalResults = parseInt(n);
   } catch (err) {
-    log.error([{
-      thread_id: id,
-      msg: 'parseInt时出错'
-    }])
+    log.error(['thread', id, 'parseInt出错']);
     throw(err);
   }
 
@@ -130,10 +127,7 @@ async function thread(
           ids.push(parseInt(ss));
         }
       } catch (err) {
-        log.error([{
-          thread_id: id,
-          msg: '获取当页ids出错'
-        }]);
+        log.error(['thread', id, '获取当页ids出错']);
         throw(err);
       }
     }
