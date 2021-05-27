@@ -2,6 +2,8 @@ import { Config } from '../config/config.entity';
 import { HttpService } from '../http/http.service';
 import { MysqlService } from '../mysql/mysql.service';
 import log from '../util/logger.functions';
+import { Article } from './article.entity';
+import * as arfs from './article.function';
 
 const mysqlService = new MysqlService();
 const http = new HttpService();
@@ -20,7 +22,20 @@ async function fetchAndStore(id: number) {
   const config = Config.load();
   const r = (await http.get(`${config.ncbi.prefix}/${id}`)).toString();
   console.log(r);
-  process.exit(1);
+  const detail = {
+    id,
+    type: arfs.get_type(r),
+    publication: arfs.get_publication(r),
+    time: arfs.get_time(r),
+    title: arfs.get_title(r),
+    authors: arfs.get_authors(r),
+    abstract: arfs.get_abstract(r),
+    keywords: arfs.get_keywords(r)
+  };
+
+  const article = new Article(detail);
+  await article.sync();
+  log.log(['store', id]);
 }
 
 async function thread(
