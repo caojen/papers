@@ -7,8 +7,8 @@ mysql:                            # 指定数据库配置
 search:                           # 指定搜索配置
   keywords:                       ## 指定搜索关键词
     - "cancer"  
-  begindate: "Fri May 01 2020 00:00:00 GMT+0000"           ## 指定搜索起始日期
-  enddate: "Fri May 10 2020 00:00:00 GMT+0000"            ## 指定搜索终止日期
+  begindate: "Fri May 01 2021 00:00:00 GMT+0000"           ## 指定搜索起始日期
+  enddate: "Fri May 10 2021 00:00:00 GMT+0000"            ## 指定搜索终止日期
   interval: 1                     ## 起始日期到终止日期中，每次搜索的间隔（例如，1 表示每次只搜索1天）
   proceed: false                  ## 当搜索完 起始日期到终止日期 后，是否继续进行搜索，直到当前日期的前一天
   proceedbreak: 2000000           ## 在proceed期间，每次搜索结束后，等待多少毫秒后重新搜索

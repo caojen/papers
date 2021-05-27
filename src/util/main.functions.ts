@@ -63,12 +63,12 @@ async function thread(
   const begin = param.begintime;
   const end = new Date(begin);
   end.setDate(end.getDate() + param.interval - 1);
-
-  let r = await http.gets(prefix, {
+  const gets_params = {
     page: param.page,
     search: param.search,
     filter: `dates.${date2string(begin)}-${date2string(end)}`,
-  });
+  };
+  let r = await http.gets(prefix, gets_params);
 
   // get total results:
   let totalResults = 0;
@@ -168,7 +168,7 @@ async function thread(
       filter: `dates.${date2string(begin)}-${date2string(end)}`,
     });
   } while (curpage <= totalPage);
-  log.log(['thread', id, 'exit', curpage, '/', totalPage]);
+  log.log(['thread', id, 'exit', curpage, '/', totalPage, totalResults]);
 }
 
 export async function main() {
