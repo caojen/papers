@@ -122,7 +122,7 @@ async function thread(
         ids.push(parseInt(ss));
       }
     }
-
+    log.log(['thread', id, 'resolving ids', ...ids]);
     for (const i of ids) {
       log.log(['thread', id, 'fetch and store', i]);
       await fetchAndStore(i);
@@ -143,6 +143,7 @@ async function thread(
     ]);
 
     curpage += 1;
+    log.log(['thread', id, 'get next page', curpage]);
     r = await http.gets(prefix, {
       page: curpage,
       search: param.search,
@@ -175,9 +176,9 @@ export async function main() {
             i + 1,
           ),
         );
-        date = getNextDate(date, 1);
+        date = getNextDate(date, config.search.interval);
       }
-      Promise.all(arr).then(() => log.log(['所有线程被退出']));
+      await Promise.all(arr).then(() => log.log(['所有线程被退出']));
     }
   }
 
