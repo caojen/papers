@@ -21,7 +21,6 @@ function date2string(date: Date) {
 async function fetchAndStore(id: number) {
   const config = Config.load();
   const r = (await http.get(`${config.ncbi.prefix}/${id}`)).toString();
-  console.log(r);
   const detail = {
     id,
     type: arfs.get_type(r),
