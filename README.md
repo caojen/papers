@@ -55,5 +55,6 @@ npm run start:prod
 1. ~~在多线程下，日志输出是乱序的~~
 2. ~~在未知情况下，某个莫名出现的网络错误会导致该线程终止。暂时还没有找到是哪里有问题。~~
 
-## TODOs
+# TODOs
 1. ~~将``search.proceed=true``实现~~
+2. 测试``search.proceed=true``
