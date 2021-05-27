@@ -37,6 +37,19 @@ export class Article {
     this.keywords = detail.keywords;
   }
 
+  static async existsId(origin_id: number) {
+    if(Article.mysqlService == null) {
+      Article.mysqlService = new MysqlService();
+    }
+    const sql = `
+      select 1 from paper
+      where origin_id=?;
+    `;
+
+    const res = await Article.mysqlService.query(sql, [origin_id]);
+    return res.length !== 0;
+  }
+
   // to test if id is exists
   async exists(): Promise<Boolean> {
     const sql = `
@@ -66,7 +79,6 @@ export class Article {
     for(const author of this.authors) {
       const a = new Author(author);
       const aid = await a.sync();
-      console.log(author, aid);
       const sql = `
         insert into paper_author(pid, aid)
         values(?, ?);

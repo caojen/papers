@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as requestAsync from 'request-promise-native';
 import { Config } from 'src/config/config.entity';
+import log from 'src/util/logger.functions';
+import { sleep } from 'src/util/sleep.function';
 
 const config = Config.load();
 
@@ -15,22 +17,37 @@ export class HttpService {
     },
   ): Promise<string> {
     const u = `${url}?${config.ncbi.params.page}=${params.page}&${config.ncbi.params.term}=${params.search}&${config.ncbi.params.filter}=${params.filter}`;
+    while(true) {
+      try {
+        console.log('function gets');
+        const response = requestAsync(u, {
+          method: 'GET',
+          encoding: null,
+        });
+        console.log('function gets done');
 
-    const response = requestAsync(u, {
-      method: 'GET',
-      encoding: null,
-    });
-
-    return response;
+        return response;
+      } catch (err) {
+        log.error(['fetch error, sleep and retry...']);
+        await sleep();
+      }
+    }
   }
 
   async get(url: string): Promise<string> {
-    const response = requestAsync(url, {
-      method: 'GET',
-      encoding: null
-    });
-    // const response = '';
-    // console.log('getting url', url);
-    return response;
+    while(true) {
+      try {
+        console.log('function get');
+        const response = requestAsync(url, {
+          method: 'GET',
+          encoding: null
+        });
+        console.log('function get done');
+        return response;
+      } catch (err) {
+        log.error(['fetch error, sleep and retry...']);
+        await sleep();
+      }
+    }
   }
 }

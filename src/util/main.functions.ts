@@ -19,8 +19,12 @@ function date2string(date: Date) {
 }
 
 async function fetchAndStore(id: number) {
+  if(await Article.existsId(id)) {
+    log.warn([id, 'exists. Skip...']);
+  }
   const config = Config.load();
   const r = (await http.get(`${config.ncbi.prefix}/${id}`)).toString();
+  log.log(['-- fetch', id, 'done']);
   // console.log(r);
   
   const detail = {
@@ -33,12 +37,11 @@ async function fetchAndStore(id: number) {
     abstract: arfs.get_abstract(r),
     keywords: arfs.get_keywords(r)
   };
-  console.log(detail);
-  // process.exit(0);
+  // console.log(detail);
 
   const article = new Article(detail);
   const pid = await article.sync();
-  log.log(['store', id, "=>", pid]);
+  log.log(['-- store', id, "=>", pid]);
 }
 
 async function thread(

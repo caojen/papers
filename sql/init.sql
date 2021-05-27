@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `paper` (
   `type` VARCHAR(32) NOT NULL COMMENT '类型',
   `publication` VARCHAR(128) NOT NULL COMMENT '发表刊物',
   `time` VARCHAR(32) NOT NULL COMMENT '发表时间',
-  `title` VARCHAR(256) NOT NULL COMMENT '论文标题',
+  `title` VARCHAR(1024) NOT NULL COMMENT '论文标题',
   PRIMARY KEY (`id`),
   UNIQUE INDEX paper_origin_id_unique_index(`origin_id`)
 )
