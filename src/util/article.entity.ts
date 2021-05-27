@@ -1,4 +1,3 @@
-import { MysqlService } from 'src/mysql/mysql.service';
 import { Author } from './author.entity';
 import { Keyword } from './keyword.entity';
 import log from './logger.functions';

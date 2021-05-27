@@ -38,13 +38,13 @@ export class MysqlService {
         queueLimit: 0,
       });
     } catch (err) {
-      console.log('create pool failed...')
+      console.log('create pool failed...');
       console.log(err);
     }
   }
 
   async query(sql: string, params: any[] = []): Promise<any> {
-    while(true) {
+    while (true) {
       try {
         if (sql.trim().substr(0, 6).toLocaleLowerCase() === 'select') {
           const res = await this.selectPool.query(sql, params);
