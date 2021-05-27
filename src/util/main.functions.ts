@@ -141,7 +141,7 @@ async function thread(
         throw(err);
       }
     }
-    log.log(['thread', id, 'resolving ids', ...ids]);
+    log.log(['thread', id, 'resolving ids', ...ids, 'page =', curpage]);
     for (const i of ids) {
       // log.log(['thread', id, 'fetch and store', i]);
       await fetchAndStore(i);
@@ -162,7 +162,7 @@ async function thread(
     ]);
 
     curpage += 1;
-    log.log(['thread', id, 'get next page', curpage]);
+    // log.log(['thread', id, 'get next page', curpage]);
     r = await http.gets(prefix, {
       page: curpage,
       search: param.search,
