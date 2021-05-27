@@ -124,6 +124,7 @@ async function thread(
         while(n === null) {
           log.error(['thread', id, 'n is null']);
           n = e_ids.exec(r);
+          await sleep();
         }
         const str = n[0];
         const s = str.substr(config.ncbi.ids.length + 2, str.length - 2);
