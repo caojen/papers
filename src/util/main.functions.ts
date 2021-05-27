@@ -74,7 +74,7 @@ async function thread(
   let totalResults = 0;
   {
     const e_totalResult = new RegExp(
-      `${config.ncbi.totalResults}:\\sparseInt\\("\\d+"`,
+      `${config.ncbi.totalResults}:\\s+parseInt\\("\\d+"`,
       'g',
     );
     const str = e_totalResult.exec(r)[0];
