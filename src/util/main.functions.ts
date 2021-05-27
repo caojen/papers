@@ -120,7 +120,11 @@ async function thread(
     {
       try {
         const e_ids = new RegExp(`${config.ncbi.ids}="\\S+"`, 'g');
-        const str = e_ids.exec(r)[0];
+        let n = null;
+        while(n === null) {
+          n = e_ids.exec(r);
+        }
+        const str = n[0];
         const s = str.substr(config.ncbi.ids.length + 2, str.length - 2);
         const split = s.split(',');
         for (const ss of split) {
