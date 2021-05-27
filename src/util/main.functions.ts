@@ -81,10 +81,11 @@ async function thread(
     const n = /\d+/g.exec(str)[0];
     totalResults = parseInt(n);
   } catch (err) {
-    throw {
+    log.error([{
       thread_id: id,
       msg: 'parseInt时出错'
-    }
+    }])
+    throw(err);
   }
 
   if (totalResults > 10000) {
