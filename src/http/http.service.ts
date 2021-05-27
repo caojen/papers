@@ -19,12 +19,10 @@ export class HttpService {
     const u = `${url}?${config.ncbi.params.page}=${params.page}&${config.ncbi.params.term}=${params.search}&${config.ncbi.params.filter}=${params.filter}`;
     while (true) {
       try {
-        console.log('function gets');
         const response = requestAsync(u, {
           method: 'GET',
           encoding: null,
         });
-        console.log('function gets done');
 
         return response;
       } catch (err) {
@@ -37,12 +35,10 @@ export class HttpService {
   async get(url: string): Promise<string> {
     while (true) {
       try {
-        console.log('function get');
         const response = requestAsync(url, {
           method: 'GET',
           encoding: null,
         });
-        console.log('function get done');
         return response;
       } catch (err) {
         log.error(['fetch error, sleep and retry...']);
