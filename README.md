@@ -20,7 +20,7 @@
    5. 如果无法执行，请自行`nc $MYSQL_HOST $MYSQL_PORT`诊断错误
 4. 配置爬虫信息：
    1. 打开``config.yaml``
-   2. ``search.keywos``可以配置需要搜索的字段，可以指定多个字段
+   2. ``search.keywords``可以配置需要搜索的字段，可以指定多个字段
    3. ``search.begindate, search.enddate``指定从哪到哪，闭区间。
    4. ``search.proceed``指定当搜集完上面的日期区间后，是否继续搜集，直到今天为止。~~（TODO：该选项未影响程序）~~
 
