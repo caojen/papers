@@ -29,6 +29,7 @@
 ```bash
 npm run start:dev
 # OR
+npm run build
 npm run start:prod
 ```
 
