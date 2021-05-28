@@ -47,7 +47,7 @@ export function get_time(c: string): string {
     const begin = firstIndex + target.length;
     const length = endIndex - begin;
     ret = c.substr(begin, length).trim();
-    if (ret.length > 32) {
+    if (ret.length > 128) {
       ret = '';
     }
   }
@@ -62,7 +62,7 @@ export function get_time(c: string): string {
       const begin = firstIndex + target.length;
       const length = endIndex - begin;
       ret = c.substr(begin, length).trim();
-      if (ret.length > 32) {
+      if (ret.length > 128) {
         ret = '';
       }
     }
