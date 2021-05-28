@@ -4,7 +4,7 @@ import { main } from './util/main.functions';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  main(); // 爬虫入口点
-  await app.listen(3000); // 后端接入点
+  await main(); // 爬虫入口点
+  // await app.listen(3000); // 后端接入点
 }
 bootstrap();
