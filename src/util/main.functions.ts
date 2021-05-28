@@ -141,7 +141,7 @@ async function thread(
         throw(err);
       }
     }
-    log.log(['thread', id, 'resolving ids', ...ids, 'page =', curpage]);
+    log.log(['thread', id, 'resolving ids', ...ids, 'page =', curpage, '/', totalPage]);
     for (const i of ids) {
       // log.log(['thread', id, 'fetch and store', i]);
       await fetchAndStore(i);
@@ -208,6 +208,7 @@ export async function main() {
 
   // todo: continue
   if (config.search.proceed) {
+    log.log(['正在准备执行计划'])
     let date = new Date(config.search.enddate);
     date = getNextDate(date, 1);
     let now = new Date();
@@ -239,10 +240,10 @@ export async function main() {
           date.getMonth() == now.getMonth()
         ) {
           // do nothing...
+          await sleep(config.search.proceedbreak);
         } else {
           date = getNextDate(date, 1);
         }
-        await sleep(config.search.proceedbreak);
         now = new Date();
       }
       await sleep(config.search.proceedbreak);
