@@ -40,6 +40,21 @@ export function get_time(c: string): string {
   if (ret.length > 32) {
     ret = '';
   }
+
+  if(ret === '') {
+    // <span class="cit">2021 May 3;88(5):260.</span>
+    const target = '<span class="cit">';
+    const end = ';';
+    const firstIndex = c.indexOf(target);
+    const endIndex = c.indexOf(end, firstIndex);
+    const begin = firstIndex + target.length;
+    const length = endIndex - begin;
+    ret = c.substr(begin, length).trim();
+    if (ret.length > 32) {
+      ret = '';
+    }
+  }
+
   return ret;
 }
 
