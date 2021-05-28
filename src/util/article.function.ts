@@ -5,15 +5,19 @@ export function get_type(c: string): string {
   const target = '<div class="publication-type"';
   const end = '/div>';
   const firstIndex = c.indexOf(target);
-  const endIndex = c.indexOf(end, firstIndex);
-  const begin = firstIndex + target.length;
-  const length = endIndex - begin;
-  let ret = c.substr(begin, length).trim();
-  ret = ret.substr(1, ret.length - 2);
-  if (ret.length > 32) {
-    ret = '';
+  if(firstIndex !== -1) {
+    const endIndex = c.indexOf(end, firstIndex);
+    const begin = firstIndex + target.length;
+    const length = endIndex - begin;
+    let ret = c.substr(begin, length).trim();
+    ret = ret.substr(1, ret.length - 2);
+    if (ret.length > 32) {
+      ret = '';
+    }
+    return ret;
+  } else {
+    return '';
   }
-  return ret;
 }
 
 export function get_publication(c: string): string {
@@ -22,23 +26,30 @@ export function get_publication(c: string): string {
   const target = '<meta name="citation_publisher" content="';
   const end = '">';
   const firstIndex = c.indexOf(target);
-  const endIndex = c.indexOf(end, firstIndex);
-  const begin = firstIndex + target.length;
-  const length = endIndex - begin;
-  const ret = c.substr(begin, length).trim();
-  return ret;
+  if(firstIndex !== -1) {
+    const endIndex = c.indexOf(end, firstIndex);
+    const begin = firstIndex + target.length;
+    const length = endIndex - begin;
+    const ret = c.substr(begin, length).trim();
+    return ret;
+  } else {
+    return '';
+  }
 }
 
 export function get_time(c: string): string {
+  let ret = '';
   const target = '<span class="secondary-date">';
   const end = '</span>';
   const firstIndex = c.indexOf(target);
-  const endIndex = c.indexOf(end, firstIndex);
-  const begin = firstIndex + target.length;
-  const length = endIndex - begin;
-  let ret = c.substr(begin, length).trim();
-  if (ret.length > 32) {
-    ret = '';
+  if(firstIndex !== -1) {
+    const endIndex = c.indexOf(end, firstIndex);
+    const begin = firstIndex + target.length;
+    const length = endIndex - begin;
+    ret = c.substr(begin, length).trim();
+    if (ret.length > 32) {
+      ret = '';
+    }
   }
 
   if(ret === '') {
@@ -46,12 +57,24 @@ export function get_time(c: string): string {
     const target = '<span class="cit">';
     const end = ';';
     const firstIndex = c.indexOf(target);
-    const endIndex = c.indexOf(end, firstIndex);
-    const begin = firstIndex + target.length;
-    const length = endIndex - begin;
-    ret = c.substr(begin, length).trim();
-    if (ret.length > 32) {
-      ret = '';
+    if(firstIndex !== -1) {
+      const endIndex = c.indexOf(end, firstIndex);
+      const begin = firstIndex + target.length;
+      const length = endIndex - begin;
+      ret = c.substr(begin, length).trim();
+      if (ret.length > 32) {
+        ret = '';
+      }
+    }
+  }
+
+  if(ret === '') {
+    // datetime="2021-05-19"
+    const target = 'datetime="';
+    const firstIndex = c.indexOf(target);
+    if(firstIndex !== -1) {
+      const begin = firstIndex + target.length;
+      ret=c.substr(begin, 10).trim();
     }
   }
 
