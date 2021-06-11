@@ -4,9 +4,9 @@ USE `papers`;
 
 CREATE TABLE IF NOT EXISTS `search` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `value` VARCHAR(1024) NOT NULL,
+  `v` VARCHAR(1024) NOT NULL,
   PRIMARY KEY(`id`),
-  UNIQUE INDEX search_unique_value(`value`)
+  UNIQUE INDEX search_unique_value(`v`)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
