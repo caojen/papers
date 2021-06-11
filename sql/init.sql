@@ -2,6 +2,15 @@ CREATE DATABASE IF NOT EXISTS `papers`;
 
 USE `papers`;
 
+CREATE TABLE IF NOT EXISTS `search` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `value` VARCHAR(1024) NOT NULL,
+  PRIMARY KEY(`id`),
+  UNIQUE INDEX search_unique_value(`value`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 -- 创建论文表，保存论文基本信息
 CREATE TABLE IF NOT EXISTS `paper` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -10,8 +19,11 @@ CREATE TABLE IF NOT EXISTS `paper` (
   `publication` VARCHAR(256) NOT NULL COMMENT '发表刊物',
   `time` VARCHAR(128) NOT NULL COMMENT '发表时间',
   `title` VARCHAR(2048) NOT NULL COMMENT '论文标题',
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sid` INT(11) NOT NULL COMMENT '对应的search表的id',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX paper_origin_id_unique_index(`origin_id`)
+  UNIQUE INDEX paper_origin_id_unique_index(`origin_id`),
+  FOREIGN KEY(`sid`) REFERENCES `search`(`id`)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
