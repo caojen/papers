@@ -1,6 +1,6 @@
 import { Author } from './author.entity';
 import { Keyword } from './keyword.entity';
-import log from './logger.functions';
+import log from '../logger.functions';
 import { mysqlService } from './mysql.instance';
 
 export class Article {
