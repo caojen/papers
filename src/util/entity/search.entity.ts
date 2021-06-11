@@ -30,7 +30,7 @@ export class Search {
     }
 
     /**
-     * Create a new search.
+     * Create a new row in search.
      * Store `this.v` into database, sync this.id, then return true.
      * If failed, sync this.id, return false.
      */
