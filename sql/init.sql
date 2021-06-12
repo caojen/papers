@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS `papers`;
+
 CREATE DATABASE IF NOT EXISTS `papers`;
 
 USE `papers`;
