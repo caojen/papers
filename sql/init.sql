@@ -13,6 +13,15 @@ CREATE TABLE IF NOT EXISTS `search` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+insert into `search`(`v`) values('respiratory diseases');
+insert into `search`(`v`) values('circulatory diseases');
+insert into `search`(`v`) values('digestive system diseases');
+insert into `search`(`v`) values('urinary system diseases');
+insert into `search`(`v`) values('hematological diseases');
+insert into `search`(`v`) values('endocrine diseases');
+insert into `search`(`v`) values('metabolic diseases');
+insert into `search`(`v`) values('rheumatic diseases');
+
 -- 创建论文表，保存论文基本信息
 CREATE TABLE IF NOT EXISTS `paper` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
