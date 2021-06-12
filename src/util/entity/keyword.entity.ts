@@ -9,6 +9,12 @@ export class Keyword {
         this.content = content;
     }
 
+    static async fetch_by_content(content: string): Promise<Keyword> {
+        const k = new Keyword(-1, content);
+        await k.sync_by_content();
+        return k;
+    }
+
     /**
      * Sync by this.id.
      * Based on this.id, fetch this.content, then return true.

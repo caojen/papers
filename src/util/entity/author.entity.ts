@@ -9,6 +9,12 @@ export class Author {
         this.name = name;
     }
 
+    static async fetch_by_name(name: string) {
+        const a = new Author(-1, name);
+        await a.sync_by_name();
+        return a;
+    } 
+
     /**
      * Sync Author by this.id.
      * Based on this.id, get this.name, return true.

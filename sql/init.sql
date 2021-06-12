@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `paper` (
   `time` VARCHAR(128) NOT NULL COMMENT '发表时间',
   `title` VARCHAR(2048) NOT NULL COMMENT '论文标题',
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `search_time` TIMESTAMP NOT NULL COMMENT '搜索时指定的时间',
   `sid` INT(11) NOT NULL COMMENT '对应的search表的id',
   PRIMARY KEY (`id`),
   UNIQUE INDEX paper_origin_id_unique_index(`origin_id`),
