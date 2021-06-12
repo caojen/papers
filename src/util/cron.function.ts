@@ -4,6 +4,7 @@ import { Article } from './entity/article.entity';
 import { Search } from './entity/search.entity';
 import log from './logger.functions';
 import { mysqlService } from './mysql.instance';
+import { setLatestDate } from './settings.function';
 
 const http = new HttpService();
 
@@ -31,6 +32,9 @@ async function main() {
   const start = getPrevDate(now);
   const end = getPrevDate(now);
   log.log(['main: running for date =', start]);
+
+  // set start as the 'latest date'
+  await setLatestDate(searches, start);
 
   // for each search in searches:
   for (const s of searches) {
@@ -152,7 +156,7 @@ function getPrevDate(date: Date, interval = 1): Date {
   return ret;
 }
 
-function date2string(date: Date): string {
+export function date2string(date: Date): string {
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 }
 
