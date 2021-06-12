@@ -79,21 +79,21 @@ async function thread_main(
 ) {
   log.log(['thread', threadid, 'started', search.v, time, beginPage, endPage]);
   // for each page:
-  for(let page = beginPage; page < endPage; page++) {
+  for (let page = beginPage; page < endPage; page++) {
     // fetch the context:
     const params = {
       page,
       search: search.v,
-      filter: `dates.${date2string(time)}-${date2string(time)}`
-    }
+      filter: `dates.${date2string(time)}-${date2string(time)}`,
+    };
     const context = await http.gets(config.ncbi.prefix, params);
     // get all ids in this page(context)
     const ids = getContextIds(config, context);
-    if(ids.length === 0) {
+    if (ids.length === 0) {
       log.warn(['thread', threadid, '获取页', page, 'id失败']);
     } else {
       log.log(['thread', threadid, 'pages: ', ...ids]);
-      for(const id of ids) {
+      for (const id of ids) {
         await fetchAndStore(id, time, search);
       }
     }
@@ -101,14 +101,14 @@ async function thread_main(
 }
 
 async function fetchAndStore(id: number, time: Date, search: Search) {
-  if(await Article.exists_origin_id(id) === true) {
+  if ((await Article.exists_origin_id(id)) === true) {
     log.log([id, 'exists, skip...']);
   }
 
   const config = Config.load();
   const context = await http.get(`${config.ncbi.prefix}/${id}`);
   const article = new Article(id, context, time, search);
-  if(article.resolve()) {
+  if (article.resolve()) {
     await article.sync();
   }
 }
@@ -155,8 +155,8 @@ async function getCurPage(search: Search, time: Date) {
 
 function getContextIds(config: Config, context: string): number[] {
   const e_ids = new RegExp(`${config.ncbi.ids}="\\S+"`, 'g');
-  let n = e_ids.exec(context);
-  if(n === null) {
+  const n = e_ids.exec(context);
+  if (n === null) {
     return [];
   }
   const ids = [];
