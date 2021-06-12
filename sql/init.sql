@@ -87,3 +87,12 @@ CREATE TABLE IF NOT EXISTS `settings` (
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+-- 创建 翻译内容表
+-- 调用baidu api, 每次调用后的结果都存放在这里，避免重复调用
+CREATE TABLE IF NOT EXISTS `translation` (
+  `md5sum` CHAR(32) NOT NULL,
+  `content` TEXT NOT NULL
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
