@@ -1,4 +1,5 @@
-import { Body, Controller, Get, HttpException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Param, Post, Query } from '@nestjs/common';
+import { query } from 'express';
 import { AppService } from './app.service';
 
 @Controller()
@@ -23,12 +24,12 @@ export class AppController {
   }
 
   @Get('content')
-  async getContent(@Param() params: {
-    sid: number,
-    pageSize: number,
-    offset: number
+  async getContent(@Query() query: {
+    sid: string,
+    pageSize: string,
+    offset: string
   }) {
-    const { sid, pageSize, offset } = params;
-    return await this.appService.getContent(sid, pageSize, offset);
+    const { sid, pageSize, offset } = query;
+    return await this.appService.getContent(parseInt(sid), parseInt(pageSize), parseInt(offset));
   }
 }

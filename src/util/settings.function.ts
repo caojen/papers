@@ -9,7 +9,7 @@ export async function setLatestDate(searches: Search[], time: Date) {
     on duplicate key update v = ?;
   `;
   for(const search of searches) {
-    await mysqlService.query(sql, [search, date2string(time), date2string(time)]);
+    await mysqlService.query(sql, [search.v, date2string(time), date2string(time)]);
   }
 }
 

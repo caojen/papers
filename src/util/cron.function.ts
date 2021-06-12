@@ -31,7 +31,7 @@ async function main() {
   // **yesterday**
   const start = getPrevDate(now);
   const end = getPrevDate(now);
-  log.log(['main: running for date =', start]);
+  log.log(['main: running for date =', date2string(start)]);
 
   // set start as the 'latest date'
   await setLatestDate(searches, start);
