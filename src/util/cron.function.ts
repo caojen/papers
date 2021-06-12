@@ -8,6 +8,7 @@ import { mysqlService } from './mysql.instance';
 const http = new HttpService();
 
 export async function cron_main() {
+  log.log(['cron started...']);
   await main();
 }
 
@@ -21,11 +22,12 @@ async function main() {
 
   // fetch all `search` that will be used later
   const searches: Search[] = await Search.fetchAll();
-
+  log.log(['main:', ...searches.map(s => s.v)]);
   // get the date that will be searched
   // **yesterday**
   const start = getPrevDate(new Date());
   const end = getPrevDate(new Date());
+  log.log(['main: running for date =', start]);
 
   // for each search in searches:
   for (const s of searches) {
@@ -36,6 +38,8 @@ async function main() {
 
 async function prepare(search: Search, start: Date, end: Date) {
   const config = Config.load();
+
+  log.log(['prepare for search', search, 'at start =', start]);
 
   // get the first page to resolve basic information
   const prefix = config.ncbi.prefix;
