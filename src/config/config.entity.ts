@@ -11,14 +11,6 @@ export class Config {
     pass: string;
     database: string;
   };
-  search: {
-    keywords: string[];
-    begindate: string;
-    enddate: string;
-    interval: number;
-    proceed: boolean;
-    proceedbreak: number;
-  };
   time: {
     threads: number;
     interval: number;

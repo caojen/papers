@@ -35,6 +35,21 @@ export class Article {
   }
 
   /**
+   * To test if origin_id already exists.
+   * If exists, return true.
+   * @param id origin_id
+   */
+  static async exists_origin_id(id: number): Promise<boolean> {
+    const sql = `
+      SELECT 1
+      FROM paper
+      WHERE origin_id = ?;
+    `;
+    const res = await mysqlService.query(sql, [id]);
+    return res.length !== 0;
+  }
+
+  /**
    * Resolve this.context into this.
    * Return true, if resolving done. This means this.sync should be called later to store this into database.
    * Return false, meaning that resolve failed, or origin_id exists.
