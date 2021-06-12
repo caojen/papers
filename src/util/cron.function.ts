@@ -10,6 +10,7 @@ const http = new HttpService();
 export async function cron_main() {
   log.log(['cron started...']);
   await main();
+  log.log(['cron finished...']);
 }
 
 export async function cron_exit() {
@@ -20,13 +21,15 @@ async function main() {
   // load static config
   const config = Config.load();
 
+  const now = new Date();
+
   // fetch all `search` that will be used later
   const searches: Search[] = await Search.fetchAll();
   log.log(['main:', ...searches.map(s => s.v)]);
   // get the date that will be searched
   // **yesterday**
-  const start = getPrevDate(new Date());
-  const end = getPrevDate(new Date());
+  const start = getPrevDate(now);
+  const end = getPrevDate(now);
   log.log(['main: running for date =', start]);
 
   // for each search in searches:
@@ -39,7 +42,7 @@ async function main() {
 async function prepare(search: Search, start: Date, end: Date) {
   const config = Config.load();
 
-  log.log(['prepare for search', search, 'at start =', start]);
+  log.log(['prepare for search', search.v, 'at start =', start]);
 
   // get the first page to resolve basic information
   const prefix = config.ncbi.prefix;
@@ -54,10 +57,12 @@ async function prepare(search: Search, start: Date, end: Date) {
   // fetch from database.settings, as curPage
   let curPage = await getCurPage(search, start);
 
+  log.log(['prepare for search =', search.v, totalResult, totalPage, curPage]);
+
   while (curPage <= totalPage) {
     // each thread deal with 10 pages, config.time.threads total.
     const threads: Promise<any>[] = [];
-    const pagePerThread = 10;
+    const pagePerThread = 5;
     for (let i = 0; i < config.time.threads && curPage <= totalPage; i++) {
       let endPage = curPage + pagePerThread;
       if (endPage > totalPage) {
@@ -67,10 +72,12 @@ async function prepare(search: Search, start: Date, end: Date) {
       curPage = endPage;
     }
     // wait threads finish
-    Promise.all(threads).then(() => log.log(['所有线程已退出']));
+    await Promise.all(threads)
+      .then(() => log.log(['所有线程已退出']))
+      .catch(() => log.log(['某个线程出错']))
   }
 
-  log.log(['search for', search, start, 'done', curPage, '/', totalPage]);
+  log.log(['search for', search.v, start, 'done', curPage, '/', totalPage]);
 }
 
 async function thread_main(
@@ -81,7 +88,7 @@ async function thread_main(
   beginPage: number,
   endPage: number,
 ) {
-  log.log(['thread', threadid, 'started', search.v, time, beginPage, endPage]);
+  log.log(['thread', threadid, 'started', search.v, date2string(time), beginPage, endPage]);
   // for each page:
   for (let page = beginPage; page < endPage; page++) {
     // fetch the context:
@@ -96,23 +103,45 @@ async function thread_main(
     if (ids.length === 0) {
       log.warn(['thread', threadid, '获取页', page, 'id失败']);
     } else {
-      log.log(['thread', threadid, 'pages: ', ...ids]);
+      log.log(['thread', threadid, ...ids, `(${search.v}: ${page}, [${beginPage}..${endPage}])`]);
       for (const id of ids) {
+        // log.log(['thread', threadid, 'fetch', id]);
         await fetchAndStore(id, time, search);
+        // log.log(['thread', threadid, 'store', id]);
       }
+      // update this settings
+      // await updateSettings(search, time, page);
     }
   }
+
+  log.log(['thread', threadid, 'done', search.v, date2string(time), beginPage, endPage]);
+}
+
+async function updateSettings(search: Search, time: Date, page: number) {
+  const update_newpage_sql = `
+    insert into settings(search, date, page)
+    values(?, ?, ?)
+    on duplicate key update page = ?;
+  `;
+
+  await mysqlService.query(update_newpage_sql, [
+    search.v,
+    date2string(time),
+    page,
+    page,
+  ]);
 }
 
 async function fetchAndStore(id: number, time: Date, search: Search) {
   if ((await Article.exists_origin_id(id)) === true) {
-    log.log([id, 'exists, skip...']);
+    // log.log([id, 'exists, skip...']);
+    return;
   }
 
   const config = Config.load();
   const context = await http.get(`${config.ncbi.prefix}/${id}`);
   const article = new Article(id, context, time, search);
-  if (article.resolve()) {
+  if (await article.resolve()) {
     await article.sync();
   }
 }
@@ -141,20 +170,21 @@ function getTotalResult(config: Config, page: string): number {
   return r;
 }
 
-async function getCurPage(search: Search, time: Date) {
-  const fetch_newpage_sql = `
-    select page from settings
-    where search = ? and date = ?;
-  `;
-  const ret = await mysqlService.query(fetch_newpage_sql, [
-    search.v,
-    date2string(time),
-  ]);
-  if (ret.length === 0) {
-    return 1;
-  } else {
-    return ret[0].page + 1;
-  }
+async function getCurPage(search: Search, time: Date): Promise<number> {
+  // const fetch_newpage_sql = `
+  //   select page from settings
+  //   where search = ? and date = ?;
+  // `;
+  // const ret = await mysqlService.query(fetch_newpage_sql, [
+  //   search.v,
+  //   date2string(time),
+  // ]);
+  // if (ret.length === 0) {
+  //   return 1;
+  // } else {
+  //   return ret[0].page + 1;
+  // }
+  return 1;
 }
 
 function getContextIds(config: Config, context: string): number[] {

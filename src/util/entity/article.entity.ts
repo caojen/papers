@@ -32,6 +32,10 @@ export class Article {
     this.context = context;
     this.search_time = search_time;
     this.search = search;
+
+    // init
+    this.authors = [];
+    this.keywords = [];
   }
 
   /**
@@ -85,7 +89,7 @@ export class Article {
      */
     const paper_sql = `
       INSERT INTO paper(origin_id, type, publication, time, title, search_time, sid)
-      VALUES(?, ?, ?, ?, ?, ?, ?, ?);      
+      VALUES(?, ?, ?, ?, ?, ?, ?);      
     `;
     const paper_res = await mysqlService.query(paper_sql, [
       this.origin_id,

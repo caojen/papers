@@ -5,7 +5,7 @@ mysql:                                                                    # 指�
   pass: "MYSQL_PASS"
   database: "MYSQL_DATABASE"
 time:
-  threads: 20                                                             ## 搜索启动的线程数量
+  threads: 20                                                             ## 搜索启动的(最多)线程数量
   interval: 1000                                                          ## 所有等待时间统一为 多少 毫秒
 ncbi:                                                                     # 与爬虫页面相关的配置
   prefix: "https://pubmed.ncbi.nlm.nih.gov"
