@@ -55,6 +55,8 @@ export class MysqlService {
         }
       } catch (err) {
         this.logger.error(err);
+        this.logger.error(sql);
+        this.logger.error(params);
         await sleep();
       }
     }

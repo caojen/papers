@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common';
 
-const logs: Logger = new Logger('util');
-const warns: Logger = new Logger('util');
-const errors: Logger = new Logger('util');
+const logs: Logger = new Logger('cron');
+const warns: Logger = new Logger('cron');
+const errors: Logger = new Logger('cron');
 
 function log(c: any[]) {
   let output = '';

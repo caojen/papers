@@ -4,17 +4,8 @@ mysql:                                                                    # 指�
   user: "MYSQL_USER"
   pass: "MYSQL_PASS"
   database: "MYSQL_DATABASE"
-search:                                                                   # 指定搜索配置
-  keywords:                                                               ## 指定搜索关键词
-    - "cancer"  
-    - "3D"
-  begindate: "Fri May 01 2021 00:00:00 GMT+0000"                          ## 指定搜索起始日期
-  enddate: "Fri May 26 2021 00:00:00 GMT+0000"                            ## 指定搜索终止日期
-  interval: 1                                                             ## 起始日期到终止日期中，每次搜索的间隔（例如，1 表示每次只搜索1天）
-  proceed: true                                                           ## 当搜索完 起始日期到终止日期 后，是否继续进行搜索，直到当前日期的前一天
-  proceedbreak: 2000000                                                   ## 在proceed期间，每次搜索结束后，等待多少毫秒后重新搜索
 time:
-  threads: 20                                                             ## 搜索启动的线程数量
+  threads: 20                                                             ## 搜索启动的(最多)线程数量
   interval: 1000                                                          ## 所有等待时间统一为 多少 毫秒
 ncbi:                                                                     # 与爬虫页面相关的配置
   prefix: "https://pubmed.ncbi.nlm.nih.gov"
