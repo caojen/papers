@@ -10,7 +10,8 @@ export class Article {
   origin_id: number;
   type: string;
   publication: string;
-  time: Date;
+  time: string;
+  title: string;
   search_time: Date;
 
   search: Search;
@@ -20,8 +21,10 @@ export class Article {
 
   context: string;
 
-  constructor(context: string) {
+  constructor(context: string, search_time: Date, search: Search) {
     this.context = context;
+    this.search_time = search_time;
+    this.search = search;
   }
 
   /**
@@ -30,7 +33,24 @@ export class Article {
    * Return false, meaning that resolve failed, or origin_id exists.
    */
   async resolve(): Promise<boolean> {
-    return false;
+    if (this.context === '') {
+      return false;
+    }
+    this.type = get_type(this.context);
+    this.publication = get_publication(this.context);
+    this.time = get_time(this.context);
+    const authors = get_authors(this.context);
+    for (const author of authors) {
+      this.authors.push(await Author.fetch_by_name(author));
+    }
+    this.title = get_title(this.context);
+    this.abstract = get_abstract(this.context);
+    const keywords = get_keywords(this.context);
+    for (const keyword of keywords) {
+      this.keywords.push(await Keyword.fetch_by_content(keyword));
+    }
+
+    return true;
   }
 
   /**
