@@ -1,3 +1,4 @@
+import { mysqlService } from '../mysql.instance';
 import { Author } from './author.entity';
 import { Keyword } from './keyword.entity';
 import { Search } from './search.entity';
@@ -21,7 +22,13 @@ export class Article {
 
   context: string;
 
-  constructor(context: string, search_time: Date, search: Search) {
+  constructor(
+    origin_id: number,
+    context: string,
+    search_time: Date,
+    search: Search,
+  ) {
+    this.origin_id = origin_id;
     this.context = context;
     this.search_time = search_time;
     this.search = search;
@@ -58,6 +65,51 @@ export class Article {
    * Always return true.
    */
   async sync(): Promise<boolean> {
+    /**
+     * Paper
+     */
+    const paper_sql = `
+      INSERT INTO paper(origin_id, type, publication, time, title, search_time, sid)
+      VALUES(?, ?, ?, ?, ?, ?, ?, ?);      
+    `;
+    const paper_res = await mysqlService.query(paper_sql, [
+      this.origin_id,
+      this.type,
+      this.publication,
+      this.time,
+      this.title,
+      this.search_time,
+      this.search.id,
+    ]);
+    this.id = paper_res.insertId;
+    /**
+     * Abstract
+     */
+    const abstract_sql = `
+      INSERT INTO abstract(pid, content)
+      VALUES(?, ?);
+    `;
+    await mysqlService.query(abstract_sql, [this.id, this.abstract]);
+    /**
+     * paper_author
+     */
+    const author_sql = `
+      INSERT INTO paper_author(pid, aid)
+      VALUES(?, ?);
+    `;
+    for (const author of this.authors) {
+      await mysqlService.query(author_sql, [this.id, author.id]);
+    }
+    /**
+     * paper_keyword
+     */
+    const keyword_sql = `
+      INSERT INTO paper_keyword(pid, kid)
+      VALUES(?, ?);
+    `;
+    for (const keyword of this.keywords) {
+      await mysqlService.query(keyword_sql, [this.id, keyword.id]);
+    }
     return true;
   }
 }
