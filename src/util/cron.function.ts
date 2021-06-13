@@ -161,17 +161,21 @@ export function date2string(date: Date): string {
 }
 
 function getTotalResult(config: Config, page: string): number {
-  const e_totalResult = new RegExp(
-    `${config.ncbi.totalResults}:\\s+parseInt\\("\\d+"`,
-    'g',
-  );
-  const str = e_totalResult.exec(page)[0];
-  const n = /\d+/g.exec(str)[0];
-  let r = parseInt(n);
-  if (r > 10000) {
-    r = 10000;
+  try {
+    const e_totalResult = new RegExp(
+      `${config.ncbi.totalResults}:\\s+parseInt\\("\\d+"`,
+      'g',
+    );
+    const str = e_totalResult.exec(page)[0];
+    const n = /\d+/g.exec(str)[0];
+    let r = parseInt(n);
+    if (r > 10000) {
+      r = 10000;
+    }
+    return r;
+  } catch {
+    return 0;
   }
-  return r;
 }
 
 async function getCurPage(search: Search, time: Date): Promise<number> {
