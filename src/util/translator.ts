@@ -65,7 +65,6 @@ export class Translator {
     let json = JSON.parse(response);
     if(json['error_code']) {
       if(json['error_code'] === '54003') {
-        // console.log('54003 limit. sleep.')
         if(long) {
           await sleep(2000 + Math.ceil(Math.random() * 20000));
         } else {
@@ -81,7 +80,6 @@ export class Translator {
           }
           this.output = this.output.trim();
         } else {
-          // console.log('failed. just null');
           this.output = null;
         }
       } else {
@@ -98,8 +96,8 @@ export class Translator {
     if(this.output) {
       // save this
       const sql = `
-      INSERT INTO translation(md5sum, content)
-      VALUES(?, ?)
+        INSERT INTO translation(md5sum, content)
+        VALUES(?, ?)
       `;
       await mysqlService.query(sql, [this.md5sum, this.output]);
     }
