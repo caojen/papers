@@ -65,8 +65,8 @@ export class Translator {
     let json = JSON.parse(response);
     if(json['error_code']) {
       if(json['error_code'] === '54003') {
-        console.log('54003 limit. sleep.')
-        await sleep(1500);
+        // console.log('54003 limit. sleep.')
+        await sleep(2000 + Math.ceil(Math.random() * 3000));
         response = await httpService.get(url);
         json = JSON.parse(response);
         if(!json['error_code']) {

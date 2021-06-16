@@ -4,6 +4,7 @@ import { Keyword } from './keyword.entity';
 import { Search } from './search.entity';
 import log from '../logger.functions';
 import * as htmldecode from 'decode-html';
+import { Translator } from '../translator';
 
 /**
  * Table `Article`
@@ -78,6 +79,9 @@ export class Article {
       for (const keyword of keywords) {
         this.keywords.push(await Keyword.fetch_by_content(keyword));
       }
+      // fetch translation
+      (new Translator(this.title)).fetch();
+      (new Translator(this.abstract)).fetch();
     } catch (err) {
       log.error([err]);
       log.error(["error occurred. ignore this. return false"]);
