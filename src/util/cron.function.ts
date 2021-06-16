@@ -147,7 +147,7 @@ async function updateSettings(search: Search, time: Date, page: number) {
 
 async function fetchAndStore(id: number, time: Date, search: Search) {
   if ((await Article.exists_origin_id(id)) === true) {
-    log.log([id, 'exists, skip...']);
+    // log.log([id, 'exists, skip...']);
     return;
   } else {
 
