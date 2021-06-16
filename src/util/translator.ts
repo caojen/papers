@@ -77,7 +77,7 @@ export class Translator {
           }
           this.output = this.output.trim();
         } else {
-          console.log('failed. just null');
+          // console.log('failed. just null');
           this.output = null;
         }
       } else {
