@@ -7,11 +7,18 @@ import { mysqlService } from './mysql.instance';
 import { setLatestDate } from './settings.function';
 
 const http = new HttpService();
+let running = false;
 
 export async function cron_main() {
-  log.log(['cron started...']);
-  await main();
-  log.log(['cron finished...']);
+  if(running === false) {
+    running = true;
+    log.log(['cron started...']);
+    await main();
+    log.log(['cron finished...']);
+    running = false;
+  } else {
+    log.log(['cron has started. skip this time.']);
+  }
 }
 
 export async function cron_exit() {
@@ -140,15 +147,16 @@ async function updateSettings(search: Search, time: Date, page: number) {
 
 async function fetchAndStore(id: number, time: Date, search: Search) {
   if ((await Article.exists_origin_id(id)) === true) {
-    // log.log([id, 'exists, skip...']);
+    log.log([id, 'exists, skip...']);
     return;
-  }
+  } else {
 
-  const config = Config.load();
-  const context = await http.get(`${config.ncbi.prefix}/${id}`);
-  const article = new Article(id, context, time, search);
-  if (await article.resolve()) {
-    await article.sync();
+    const config = Config.load();
+    const context = await http.get(`${config.ncbi.prefix}/${id}`);
+    const article = new Article(id, context, time, search);
+    if (await article.resolve()) {
+      await article.sync();
+    }
   }
 }
 
