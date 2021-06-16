@@ -50,6 +50,8 @@ npm run start:prod
 ```
 POST /search
 
+Content-Type: application/json
+
 body:
 {
    "v": "新的关键词"
