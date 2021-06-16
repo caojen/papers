@@ -36,11 +36,13 @@ async function main() {
   // set start as the 'latest date'
   await setLatestDate(searches, start);
 
+  const promises: Promise<any>[] = [];
   // for each search in searches:
   for (const s of searches) {
     // prepare to start
-    await prepare(s, start, end);
+    promises.push(prepare(s, start, end));
   }
+  await Promise.all(promises);
 }
 
 async function prepare(search: Search, start: Date, end: Date) {
