@@ -3,6 +3,7 @@ import { Config } from './config/config.entity';
 import { Search } from './util/entity/search.entity';
 import { mysqlService } from './util/mysql.instance';
 import { getLatestDate } from './util/settings.function';
+import { Translator } from './util/translator';
 
 @Injectable()
 export class AppService {
@@ -78,11 +79,11 @@ export class AppService {
       const paper = {
         index,
         id: s.pid,
-        title: s.title,
+        title: await (new Translator(s.title)).fetch(),
         type: s.type,
         publication: s.publication,
         time: s.time,
-        abstract: s.abstract,
+        abstract: await (new Translator(s.abstract)).fetch(),
         authors: [],
         url: `${config.ncbi.prefix}/${s.origin_id}`,
         keywords: []

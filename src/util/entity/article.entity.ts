@@ -3,6 +3,7 @@ import { Author } from './author.entity';
 import { Keyword } from './keyword.entity';
 import { Search } from './search.entity';
 import log from '../logger.functions';
+import * as htmldecode from 'decode-html';
 
 /**
  * Table `Article`
@@ -87,15 +88,19 @@ export class Article {
 
   /**
    * Sync this into database.
-   * Always return true.
+   * Always return true, except the origin_id exists.
    */
   async sync(): Promise<boolean> {
     /**
      * Paper
      */
+    if(await Article.exists_origin_id(this.origin_id)) {
+      return false;
+    }
     const paper_sql = `
       INSERT INTO paper(origin_id, type, publication, time, title, search_time, sid)
-      VALUES(?, ?, ?, ?, ?, ?, ?);      
+      VALUES(?, ?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE id=id;
     `;
     const paper_res = await mysqlService.query(paper_sql, [
       this.origin_id,
@@ -107,6 +112,10 @@ export class Article {
       this.search.id,
     ]);
     this.id = paper_res.insertId;
+    if(this.id <= 0) {
+      // ignore this. return false;
+      return false;
+    }
     /**
      * Abstract
      */
@@ -120,7 +129,8 @@ export class Article {
      */
     const author_sql = `
       INSERT INTO paper_author(pid, aid)
-      VALUES(?, ?);
+      VALUES(?, ?)
+      ON DUPLICATE KEY UPDATE pid=pid;
     `;
     for (const author of this.authors) {
       await mysqlService.query(author_sql, [this.id, author.id]);
@@ -130,7 +140,8 @@ export class Article {
      */
     const keyword_sql = `
       INSERT INTO paper_keyword(pid, kid)
-      VALUES(?, ?);
+      VALUES(?, ?)
+      ON DUPLICATE KEY UPDATE pid=pid;
     `;
     for (const keyword of this.keywords) {
       await mysqlService.query(keyword_sql, [this.id, keyword.id]);
@@ -267,9 +278,12 @@ function get_abstract(c: string): string {
   const begin = index + match.length;
   const length = endIndex - begin;
   let ret = c.substr(begin, length).trim();
-  ret = ret.replace(/<p>/g, '');
-  ret = ret.replace(/<\/p>/g, '');
-  ret = ret.trim();
+
+  // remove all <...> html elements
+  ret = ret.replace(/<.*?>/g, '').trim();
+  // remove all &..; html elements
+  // ret = unescape(ret).trim();
+  ret = htmldecode(ret);
   return ret;
 }
 

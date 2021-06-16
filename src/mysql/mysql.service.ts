@@ -44,21 +44,19 @@ export class MysqlService {
   }
 
   async query(sql: string, params: any[] = []): Promise<any> {
-    while (true) {
-      try {
-        if (sql.trim().substr(0, 6).toLocaleLowerCase() === 'select') {
-          const res = await this.selectPool.query(sql, params);
-          return res[0];
-        } else {
-          const res = await this.executePool.query(sql, params);
-          return res[0];
-        }
-      } catch (err) {
-        this.logger.error(err);
-        this.logger.error(sql);
-        this.logger.error(params);
-        await sleep();
+    try {
+      if (sql.trim().substr(0, 6).toLocaleLowerCase() === 'select') {
+        const res = await this.selectPool.query(sql, params);
+        return res[0];
+      } else {
+        const res = await this.executePool.query(sql, params);
+        return res[0];
       }
+    } catch (err) {
+      this.logger.error(err);
+      this.logger.error(sql);
+      this.logger.error(params);
+      throw(err);
     }
   }
 }

@@ -5,7 +5,7 @@ export function sleep(ms = -1) {
   if (ms == -1) {
     ms = config.time.interval;
   }
-  log.warn(['sleeping for', ms, '...']);
+  // log.warn(['sleeping for', ms, '...']);
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
