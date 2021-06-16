@@ -2,6 +2,7 @@ import { mysqlService } from '../mysql.instance';
 import { Author } from './author.entity';
 import { Keyword } from './keyword.entity';
 import { Search } from './search.entity';
+import log from '../logger.functions';
 
 /**
  * Table `Article`
@@ -62,20 +63,25 @@ export class Article {
     if (this.context === '') {
       return false;
     }
-    this.type = get_type(this.context);
-    this.publication = get_publication(this.context);
-    this.time = get_time(this.context);
-    const authors = get_authors(this.context);
-    for (const author of authors) {
-      this.authors.push(await Author.fetch_by_name(author));
+    try {
+      this.type = get_type(this.context);
+      this.publication = get_publication(this.context);
+      this.time = get_time(this.context);
+      const authors = get_authors(this.context);
+      for (const author of authors) {
+        this.authors.push(await Author.fetch_by_name(author));
+      }
+      this.title = get_title(this.context);
+      this.abstract = get_abstract(this.context);
+      const keywords = get_keywords(this.context);
+      for (const keyword of keywords) {
+        this.keywords.push(await Keyword.fetch_by_content(keyword));
+      }
+    } catch (err) {
+      log.error([err]);
+      log.error(["error occurred. ignore this. return false"]);
+      return false;
     }
-    this.title = get_title(this.context);
-    this.abstract = get_abstract(this.context);
-    const keywords = get_keywords(this.context);
-    for (const keyword of keywords) {
-      this.keywords.push(await Keyword.fetch_by_content(keyword));
-    }
-
     return true;
   }
 
