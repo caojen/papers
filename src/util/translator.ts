@@ -17,11 +17,11 @@ export class Translator {
     this.md5sum = md5.digest('hex');
   }
 
-  async fetch(): Promise<string> {
+  async fetch(long: boolean = false): Promise<string> {
     // fetch from mysql:
     const mysql_data = await this.fetchMysql();
     if(mysql_data === null) {
-      const net_data = await this.fetchNet();
+      const net_data = await this.fetchNet(long);
       if(net_data === null) {
         this.output = this.origin;
       } else {
@@ -48,7 +48,7 @@ export class Translator {
     }
   }
 
-  async fetchNet(): Promise<string> {
+  async fetchNet(long: boolean = false): Promise<string> {
     this.output = null;
     const q = encodeURIComponent(this.origin);
     const from = 'auto';
@@ -66,7 +66,11 @@ export class Translator {
     if(json['error_code']) {
       if(json['error_code'] === '54003') {
         // console.log('54003 limit. sleep.')
-        await sleep(2000);
+        if(long) {
+          await sleep(2000 + Math.ceil(Math.random() * 20000));
+        } else {
+          await sleep(2000);
+        }
         response = await httpService.get(url);
         json = JSON.parse(response);
         if(!json['error_code']) {
