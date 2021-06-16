@@ -6,10 +6,12 @@ import { mysqlService } from '../mysql.instance';
 export class Search {
   id: number;
   v: string;
+  des: string;
 
-  constructor(id: number, v = '') {
+  constructor(id: number, v = '', des = '') {
     this.id = id;
     this.v = v;
+    this.des = des;
   }
 
   /**
@@ -18,13 +20,13 @@ export class Search {
    */
   static async fetchAll(): Promise<Search[]> {
     const sql = `
-            SELECT id, v
+            SELECT id, v, des
             FROM search
         `;
     const res = await mysqlService.query(sql);
     const ret: Search[] = [];
     for (const r of res) {
-      ret.push(new Search(r.id, r.v));
+      ret.push(new Search(r.id, r.v, r.des));
     }
     return ret;
   }
@@ -50,10 +52,10 @@ export class Search {
       return false;
     }
     const insert_sql = `
-            INSERT INTO search(v)
-            VALUES(?);
+            INSERT INTO search(v, des)
+            VALUES(?, ?);
         `;
-    const ires = await mysqlService.query(insert_sql, [this.v]);
+    const ires = await mysqlService.query(insert_sql, [this.v, this.des]);
     const insertId = ires.insertId;
     this.id = insertId;
     return true;

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PubMed论文查询系统</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/axios.min.js"></script>
+  <script src="js/script.js"></script>
+</head>
+<body class="global">
+  <div class="title">
+    PubMed论文查询系统
+  </div>
+
+  <div id="content"></div>
+</body>
+
+<script>
+  window.onload = loadSearches();
+</script>
+
+<style>
+.global {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 39px;
+  margin-bottom: 20px;
+  border: 2px rgb(0, 0, 0) solid;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+td, th {
+  border: 2px solid #717579;
+  text-align: center;
+  padding: 8px;
+  height: 45px;
+}
+
+tr:nth-child(even) {
+  background-color: #d3cfcf;
+}
+
+button {
+  height: 35px;
+  width: 80px;
+  border-radius: 12px
+}
+</style>
+</html>

@@ -7,8 +7,8 @@ import { Translator } from './util/translator';
 
 @Injectable()
 export class AppService {
-  async addOneSearch(v: string) {
-    const search = new Search(-1, v);
+  async addOneSearch(v: string, des: string) {
+    const search = new Search(-1, v, des);
     await search.create();
     return {
       msg: '不存在则创建',
@@ -27,6 +27,7 @@ export class AppService {
       ret.push({
         sid: search.id,
         v: search.v,
+        des: search.des,
         date
       });
     }

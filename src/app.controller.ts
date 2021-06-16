@@ -7,15 +7,15 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('search')
-  async addOneSearch(@Body() body: { v: string }) {
-    const { v } = body;
+  async addOneSearch(@Body() body: { v: string, des: string }) {
+    const { v, des } = body;
     if(v === undefined || v.length === 0) {
       throw new HttpException({
         error: '参数错误，v无效'
       }, 406);
     }
 
-    return await this.appService.addOneSearch(v);
+    return await this.appService.addOneSearch(v, des);
   }
 
   @Get('search')

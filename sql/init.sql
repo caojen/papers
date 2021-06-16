@@ -7,20 +7,21 @@ USE `papers`;
 CREATE TABLE IF NOT EXISTS `search` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `v` VARCHAR(1024) NOT NULL,
+  `des` VARCHAR(1024) NOT NULL DEFAULT '',
   PRIMARY KEY(`id`),
   UNIQUE INDEX search_unique_value(`v`)
 )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-insert into `search`(`v`) values('respiratory diseases');
-insert into `search`(`v`) values('circulatory diseases');
-insert into `search`(`v`) values('digestive system diseases');
-insert into `search`(`v`) values('urinary system diseases');
-insert into `search`(`v`) values('hematological diseases');
-insert into `search`(`v`) values('endocrine diseases');
-insert into `search`(`v`) values('metabolic diseases');
-insert into `search`(`v`) values('rheumatic diseases');
+insert into `search`(`v`, `des`) values('Respiratory Diseases', '呼吸系统疾病');
+insert into `search`(`v`, `des`) values('Circulatory Diseases', '循环系统疾病');
+insert into `search`(`v`, `des`) values('Digestive system Diseases', '消化系统疾病');
+insert into `search`(`v`, `des`) values('Urinary system Diseases', '泌尿系统疾病');
+insert into `search`(`v`, `des`) values('Hematological Diseases', '血液系统疾病');
+insert into `search`(`v`, `des`) values('Endocrine Diseases', '内分泌疾病');
+insert into `search`(`v`, `des`) values('Metabolic Diseases', '代谢性疾病');
+insert into `search`(`v`, `des`) values('Rheumatic Diseases', '风湿性疾病');
 
 -- 创建论文表，保存论文基本信息
 CREATE TABLE IF NOT EXISTS `paper` (
