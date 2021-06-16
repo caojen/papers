@@ -77,8 +77,8 @@ export class Translator {
           const results = json['trans_result'];
           for(const result of results) {
             this.output += `\n${result['dst']}`;
+            this.output = this.output.trim();
           }
-          this.output = this.output.trim();
         } else {
           this.output = null;
         }
@@ -90,8 +90,8 @@ export class Translator {
       const results = json['trans_result'];
       for(const result of results) {
         this.output += `\n${result['dst']}`;
+        this.output = this.output.trim();
       }
-      this.output = this.output.trim();
     }
     if(this.output) {
       // save this
