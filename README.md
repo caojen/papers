@@ -1,4 +1,4 @@
-# 爬虫工具v1.0
+# 爬虫工具v2.0
 
 ## 使用方法
 本工具主要依赖为：
@@ -44,3 +44,84 @@ npm run start:prod
 每当论文的标题或摘要被翻译后，翻译的内容将会保存在数据库中，以后如果再次需要获取翻译内容的话，就不再需要重新调用百度翻译api了。（百度翻译api有限额）。
 
 注意，由于QPS=1很低，如果某次前端尝试请求的所有论文都没有被第一步成功翻译的话，那么可能需要等待比较长的时间才可以返回结果。
+
+## 新建关键词
+要新建一个关键词，请向后端发送以下请求：
+```
+POST /search
+
+body:
+{
+   "v": "新的关键词"
+}
+```
+关键词被新建后，会在**下一次爬取任务时**被爬取。
+
+## 数据库表说明
++ Table ``search``
+  + 用于保存关键字
+  + 初始关键字已经定义在``sql/init.sql``中
+  + Columns:
+    + id: 关键字序号
+    + v：关键字内容
++ Table ``paper``
+  + 用于保存论文基本信息（不包括摘要）
+  + Columns:
+    + id: 论文序号
+    + origin_id: 论文在PubMed中的原始id
+    + type: 论文类型
+    + publication: 发表刊物
+    + time: 论文发表的时间
+    + create_time: 行建立时间
+    + search_time: 搜索时指定的时间范围为哪一天
+    + sid: References Table ``search``
+      + search.id
+      + 表明搜索的关键字
+
++ Table ``author``
+  + 用于保存作者信息
+  + Columns:
+    + id: 作者序号
+    + name: 作者名
+
++ Table ``paper_author``
+  + Table ``paper`` 和 Table ``author`` 的多对多关系表
+  + Columns:
+    + pid: References Table ``paper``
+      + paper.id
+      + 表明所属论文
+    + aid: References Table ``author``
+      + author.id
+      + 表明所属作者
+
++ Table ``abstract``
+  + 用于保存论文的摘要, 与Table ``paper``是一对一关系
+  + Columns:
+    + id: 摘要序号
+    + pid: Reference Table ``paper``
+      + paper.id
+      + 表明论文的序号
+    + content: 摘要内容
+
++ Table ``keyword``
+  + 用于保存所有论文Keyword
+  + Columns:
+    + id: keyword序号
+    + content: keyword内容
++ Table ``paper_keyword``
+  + Table ``paper`` 和 Table ``keyword`` 的多对多关系表
+  + Columns:
+    + pid: Reference Table ``paper``
+      + paper.id
+      + 表明所属论文
+    + kid: Reference Table ``keyword``
+      + keyword.id
+      + 表明所属关键字
++ Table ``settings``
+  + 一个在**v2.0**中没有使用的表
+
++ Table ``translation``
+  + 保存所有翻译结果
+  + Columns:
+    + md5sum: 原文的md5摘要结果
+    + content: 翻译结果
