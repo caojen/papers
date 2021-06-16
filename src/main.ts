@@ -3,6 +3,7 @@ import { CronJob } from 'cron';
 import { AppModule } from './app.module';
 import { cron_exit, cron_main } from './util/cron.function';
 import { sleep } from './util/sleep.function';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +20,8 @@ async function bootstrap() {
   app.enableCors({
     origin: '*'
   });
+
+  app.use('/', express.static('static'));
 
   app.setGlobalPrefix('api');
   await app.listen(3000); // 后端接入点

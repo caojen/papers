@@ -87,7 +87,7 @@ export class Search {
    */
   async fetch(): Promise<boolean> {
     const sql = `
-            SELECT v
+            SELECT v, des
             FROM search
             WHERE id = ?;
         `;
@@ -98,6 +98,7 @@ export class Search {
       return false;
     }
     this.v = res[0].v;
+    this.des = res[0].des;
     return true;
   }
 

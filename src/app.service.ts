@@ -49,7 +49,10 @@ export class AppService {
     if(date === undefined) {
       return {
         total: 0,
-        papers: []
+        papers: [],
+        des: search.des,
+        v: search.v,
+        date
       }
     }
     const total_sql = `
@@ -70,7 +73,10 @@ export class AppService {
 
     const ret = {
       total,
-      papers: []
+      papers: [],
+      des: search.des,
+      v: search.v,
+      date
     }
     
     let index = offset + 1;
@@ -80,6 +86,7 @@ export class AppService {
       const paper = {
         index,
         id: s.pid,
+        origin_title: s.title,
         title: await (new Translator(s.title)).fetch(),
         type: s.type,
         publication: s.publication,
