@@ -80,8 +80,8 @@ export class Article {
         this.keywords.push(await Keyword.fetch_by_content(keyword));
       }
       // fetch translation
-      (new Translator(this.title)).fetch();
-      (new Translator(this.abstract)).fetch();
+      (new Translator(this.title)).fetch(true);
+      (new Translator(this.abstract)).fetch(true);
     } catch (err) {
       log.error([err]);
       log.error(["error occurred. ignore this. return false"]);
