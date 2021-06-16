@@ -7,6 +7,7 @@
 3. 良好的网络(耗费时间最多的原因)。
 
 ## 配置步骤
+0. ``git clone``本仓库代码
 1. 安装node
 2. 运行``npm install``
 3. 配置MYSQL，请执行以下步骤
@@ -16,7 +17,7 @@
       2. Linux: ``x=y``
       3. Powershell: ``$env:x=y``
    3. 配置环境变量`MYSQL_DATABASE=papers`
-   4. 初始化数据库，使用命令：`mysql -u $MYSQL_USER -h $MYSQL_HOST -P $MYSQL_PORT -p < sql/init.sql`
+   4. 初始化数据库，使用命令：`mysql -u $MYSQL_USER -h $MYSQL_HOST -P $MYSQL_PORT -p < sql/init.sql`. **v2.0的数据库做出了修改，因此需要重新执行这一步。**
    5. 如果无法执行，请自行`nc $MYSQL_HOST $MYSQL_PORT`诊断错误
 4. 配置爬虫信息：
    1. 打开``config.yaml``
@@ -32,33 +33,3 @@ npm run start:dev
 npm run build
 npm run start:prod
 ```
-
-## 数据库信息说明
-数据库初始化文件在``sql/init.sql``中。默认数据库名为``papers``
-### Table paper
-该表存储了所有论文的基本信息，包括论文的`origin_id`(也就是远程库中这篇论文的id), ``type``(类型), `publication`(出版刊物), `time`(时间), `title`(标题)
-
-### Table author
-该表存储了所有的作者。
-作者和论文是多对多的关系，因此有另外一个表``paper_author``保存论文的所有作者。
-
-### Table abstract
-该表存储了所有的摘要。
-虽然摘要和论文是一对一的关系，但是摘要一般比较长，因此将其拆表。
-
-### Table keyword
-该表存储了所有的关键字
-关键字和论文是多对多的关系，因此还存在另外一个表``paper_keyword``来保存论文的所有关键字
-
-### Table settings
-该表是用于记录每个搜索字段每天爬虫运行到哪一页了。
-用于断点续传。
-
-# Bugs
-
-1. ~~在多线程下，日志输出是乱序的~~
-2. ~~在未知情况下，某个莫名出现的网络错误会导致该线程终止。暂时还没有找到是哪里有问题。~~
-
-# TODOs
-1. ~~将``search.proceed=true``实现~~
-2. ~~测试``search.proceed=true``~~
