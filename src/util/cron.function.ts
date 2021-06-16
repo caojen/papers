@@ -86,7 +86,7 @@ async function prepare(search: Search, start: Date, end: Date) {
     }
     // wait threads finish
     await Promise.all(threads)
-      .then(() => log.log(['所有线程已退出']))
+      // .then(() => log.log(['所有线程已退出']))
       .catch(() => log.log(['某个线程出错']))
   }
 
