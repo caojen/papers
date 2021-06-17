@@ -19,7 +19,32 @@
 </body>
 
 <script>
-  window.onload = loadSearches();
+  window.onload = () => {
+    console.log(window.location);
+    const path = window.location.pathname;
+    if(path === '/') {
+      loadSearches();
+    } else {
+      const params = getParams(window.location.search);
+      console.log(params);
+      if(params.sid !== undefined && params.pageSize !== undefined && params.offset !== undefined) {
+        params.sid = parseInt(params.sid);
+        params.pageSize = parseInt(params.pageSize);
+        params.offset = parseInt(params.offset);
+        if(!isNaN(params.sid) && !isNaN(params.pageSize) && !isNaN(params.offset)) {
+          if(params.offset % params.pageSize !== 0) {
+            gotoContent(params.sid, params.pageSize, Math.floor(params.offset / params.pageSize) * params.pageSize);
+          } else {
+            buildContentDetail(params.sid, params.pageSize, params.offset);
+          }
+        } else {
+          window.location.href = '/';
+        }
+      } else {
+        window.location.href = '/';
+      }
+    }
+  }
 </script>
 
 <style>
@@ -82,7 +107,7 @@ p {
 #pagination {
   width: 10%;
   height: 150px;
-  position: absolute;
+  position: fixed;
   right: 1%;
   top: 100px;
   text-align: center;

@@ -20,8 +20,9 @@ async function bootstrap() {
   app.enableCors({
     origin: '*'
   });
-
+  app.use('/js', express.static('static/js'));
   app.use('/', express.static('static'));
+  app.use('/content', express.static('static'));
 
   app.setGlobalPrefix('api');
   await app.listen(3000); // 后端接入点
