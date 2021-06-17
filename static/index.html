@@ -20,13 +20,11 @@
 
 <script>
   window.onload = () => {
-    console.log(window.location);
     const path = window.location.pathname;
     if(path === '/') {
       loadSearches();
     } else {
       const params = getParams(window.location.search);
-      console.log(params);
       if(params.sid !== undefined && params.pageSize !== undefined && params.offset !== undefined) {
         params.sid = parseInt(params.sid);
         params.pageSize = parseInt(params.pageSize);
