@@ -67,7 +67,7 @@ export class AppService {
         abstract.content as abstract, paper.origin_id as origin_id
       from paper
         left join abstract on paper.id = abstract.pid
-      where search_time > ? and sid = ?
+      where search_time >= ? and sid = ?
       limit ?, ?;
     `;
 
