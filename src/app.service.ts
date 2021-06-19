@@ -57,7 +57,7 @@ export class AppService {
     }
     const total_sql = `
       select count(*) as total from paper
-      where search_time > ? and sid = ?;
+      where search_time >= ? and sid = ?;
     `;
     const total_res = await mysqlService.query(total_sql, [date, sid]);
     const total = total_res[0].total;
